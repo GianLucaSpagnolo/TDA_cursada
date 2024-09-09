@@ -4,9 +4,9 @@ Teoria de Algoritmos (TB024) curso 02: Echeverria
 
 Segundo cuatrimestre 2024
 
-Table of Contents
-
 - [Clase 03/09](#clase-0309)
+- [Clase 05/09](#clase-0509)
+- [Clase 10/09](#clase-1009)
 
 ## Modalidad
 
@@ -76,8 +76,8 @@ Tengo H => T (H implica T)
 Ejemplo: si esta lloviendo llevo paraguas (H => T)
 
 - ~T => ~H: Si no llevo paraguas, no esta lloviendo
-- ~H => T v ~T: 
-- 
+- ~H => T v ~T: Si no esta lloviendo puedo o no llevar paraguas
+- T => H v ~H: Si llevo paraguas puede o no estar lloviendo
 
 Si H implica T, ~T implica ~H
 
@@ -86,13 +86,13 @@ Si H implica T, ~T implica ~H
 - Metodo directo
 - Metodo indirecto o del Contrarreciproco
 - Por el absurdo o la Contradiccion
-- 
+- Por induccion
 
 ##### Metodo Directo
 
 Asume que H es verdadera, y demuestra que T debe ser verdadera.
 
-
+![img](img/demostraciones_1.png)
 
 Se usa el razonamiento de que 2 * N es par.
 
@@ -100,21 +100,22 @@ Se usa el razonamiento de que 2 * N es par.
 
 Asume que T es falsa y demuestra que H es necesariamente falsa tambien.
 
-
+![img](img/demostraciones_2.png)
 
 ##### Por el Absurdo o la Contradiccion
 
 Asume que H es verdadera y que T es falsa, para luego llegar a una contradiccion.
 
-
+![img](img/demostraciones_3.png)
 
 ##### Por induccion
 
-Tiene tres pasos:
+Tiene dos pasos:
 
 - Primero, se demuestra que H(n_0) => T(n_0) es verdadero (caso base).
-- Segundo, se demuestra que H(n_n) => T(n_n)
-- 
+- Segundo, se demuestra que H(n) => T(n), y se demuestra que H(n+1) => T(n+1)
+
+![img](img/demostraciones_4.png)
 
 ### Grafos
 
@@ -123,15 +124,15 @@ Grafo: *conjunto de entidades (vertices o nodos) relacionados entre si de alguna
 Notacion tipica:
 
 - G = (V,E)
-- 
-- 
+- V: conjunto de vertices; V={v_1, v_2, ..., v_n}
+- E: conjunto de aristas; E={(v_1, v_2), (v_3, v_4), ...}
 
 #### Caracteristicas
 
-- Pesados/No pesados 
-- Dirigidos/No dirigidos 
-- Con o sin bucles (vertice unido a si mismo con una arista)
-- Simples/Compuestos 
+- Pesados/No pesados: cada arista puede o no tener asociada un peso.
+- Dirigidos/No dirigidos: de odo que puede ser o no lo mismo ir de un vertice a otro.
+- Con o sin bucles: vertice unido a si mismo con una arista
+- Simples/Compuestos: se pueden particionar los grafos, o se tiene un solo conjunto de nodos que no se puede particionar.
 
 #### Formas de Recorrido
 
@@ -141,22 +142,20 @@ Notacion tipica:
 
 #### Conectividad
 
-Dos vertices U y V estan conectados si existe una arista que los une.
-
-**Componente**: Subgrafo en el que cualquier par de vertices esta conectado
-
-
+- **Camino**: Sucesion de vertices y aristas que empieza y termina en vertices, y cuyos vertices inciden en las aristas que le suceden o preceden.
+- Dos vertices U y V estan conectados si existe una arista que los une.
+- **Componente (o Componente Conexa)**: Subgrafo en el que cualquier par de vertices esta conectado por un camino
 
 **Grafos No Dirigidos**: Componentes conexas (todos conectados entre si). Tiene puntos de articulacion: vertices tales que, si son removidos, aumenta la cantidad de componentes conexas del grafo.
 
-
+![img](img/grafos_1.png)
 
 **Grafos Dirigidos**:
 
 - Componentes fuertemente conexas: para todo par de vertices U y V, existe un camino (no confundir con arista) de U a V y de V a U. (camino de ida y vuelta)
 - Componentes debilmente conexas: para todo par de vertices U y V, existe un camino de uno a otro vertice, independientemente del sentido. (camino de ida pero no de vuelta, o viceversa)
 
-
+![img](img/grafos_2.png)
 
 #### Orden Topologico
 
@@ -172,7 +171,7 @@ Grafos en el que sus vertices se pueden dividir en dos subconjuntosdisjuntos e i
 
 Un grafo es **completo** cuando todos los elementos estan conectados por aristas entre si. Po otro lado, un grafo es **K_mn completo** cuando todos los elementos de U tienen aristas que los unen con todos los elementos de V, con m y n vertices respectivamente.
 
-
+![img](img/grafos_3.png)
 
 Un grafo es bipartito *si y solo si no tiene caminos impares*
 
@@ -180,7 +179,10 @@ Un grafo es bipartito *si y solo si no tiene caminos impares*
 
 Grafos no pesados: usamos BFS porque es O(N)
 
-Grafos pesados: si todos los pesos son positivos, usamos Dijkstra. Sino, podemos usar Bellman-Ford. 
+Grafos pesados: si todos los pesos son positivos, usamos Dijkstra. Sino, podemos usar Bellman-Ford.
+
+![img](img/dijkstra.jpg)
+![img](img/bellman-ford.jpg)
 
 #### Arbol de Tendido Minimo
 
@@ -201,8 +203,19 @@ Grafos pesados: si todos los pesos son positivos, usamos Dijkstra. Sino, podemos
 
 Sea A la matriz de adyacencia de un grafo (dirigido o no). Entonces el elemento a_ij denota si dos vertices (i,j) son adyacentes o no.
 
-**Teorema**: A ^ n (el producto de matrices de A consigo misma n veces) resulta en una matriz cuyo elemento A_ij ^ n 
+**Teorema**: A ^ n (el producto de matrices de A consigo misma n veces) resulta en una matriz cuyo elemento A_ij ^ n denota la cantidad de caminos de distancia n entre (i,j)
 
-**Demostracion** (por induccion):
+![img](img/grafos_4.png)
+![img](img/grafos_5.png)
+
+---
+
+## Clase 05/09
+
+
+
+---
+
+## Clase 10/09
 
 
