@@ -7,6 +7,7 @@ Segundo cuatrimestre 2024
 - [Clase 03/09](#clase-0309)
 - [Clase 05/09](#clase-0509)
 - [Clase 10/09](#clase-1009)
+- [Clase 12/09](#clase-1209)
 
 ## Modalidad
 
@@ -428,3 +429,264 @@ En cada iteracion ¿Cuantos llamados recursivos hago? Solo 1! (parece una busque
 ---
 
 ## Clase 10/09
+
+### Algoritmos Greedy
+
+Son algoritmos que tratan de encontrar una solucion optima global a un problema dado. La idea es que se aplique una regla sencilla en cada paso, tomando decisiones localmente optimas para el estado actual.
+
+Itera y vuelve a aplicar la regla para tomar la decision localmente optima del nuevo estado actual. Y, puede considerar resultados previos pero *no futuros*.
+
+#### Algoritmo de Dijkstra
+
+Recorre un grafo para encontrar el camino minimo desde un vertice hasta otro.
+
+Se usa para grafos ponderados (con peso), y no debe tener pesos o ciclos con pesos negativos.
+
+
+
+Este algoritmo funciona usando un heap de minimos guardando las aristas, para que nos devuelva la arista mas pequeña conectada con el vertice de esa iteracion.
+
+**Regla Greedy**: Toma el proximo vertice con la arista minima.
+
+Dijkstra es un *algoritmo Greedy*. La “regla sencilla” es que toma el próximo vértice que tenga la arista más liviana. Repite la regla en cada paso. El heap que utiliza no interviene en la parte Greedy, sirve como complemento para optimizar la búsqueda del próximo vértice.
+
+#### Algoritmo de Prim
+
+Busca el arbol de tendido minimo, donde el peso total de las aristas es el minimo posible para grafos ponderados.
+
+El algoritmo parte de un
+
+
+
+Prim también es un *algoritmo Greedy*. La “regla sencilla” es que toma la arista de menor peso que aún no se insertó. Repite la regla en cada paso. El control de que no se formen ciclos es una restricción del árbol que se desea armar, no de la regla greedy.
+
+#### Algoritmo de Kruskal
+
+Tambien busca el arbol de tendido minimo. Al igual que prim, ordena las aristas por peso e incorpora la salida de menor peso. 
+
+Funcionamiento:
+
+- Ordena las aristas por peso
+- Incorpora la arista de peso mínimo
+- Controla que no se formen ciclos con una estructura *union-find*
+
+Kruskal también es un *algoritmo Greedy*. La “regla sencilla” es que toma la arista de peso mínimo que aún no se insertó. Repite la regla en cada paso. El control de que no se formen ciclos se hace con la estructura union-find; también es una restricción del resultado buscado, no de las reglas de Greedy.
+
+**Algoritmos Greedy**: buscan un optimo local para llegar a un optimo global.
+
+Desventajas:
+
+- Suele ser difícil demostrar que un algoritmo greedy halle siempre el óptimo global
+- Pueden fallar catastróficamente
+
+Ventajas:
+
+- Son intuitivos, fáciles de entender
+- Son de implementación sencilla
+- Son rápidos ("muy economicos")
+- Aunque no encuentren el óptimo global, se pueden aprovechar:
+  - Como aproximación a la solución óptima
+  - Como entrada a otro algoritmo más complejo
+
+#### Solucion desastrosa con Greedy
+
+![img](img/greedy_1.png)
+![img](img/greedy_2.png)
+
+Un **algoritmo greedy** es muy facil de entender, programar y ejecutar, pero la solucion puede ser muy mala, y a veces es muy complicado definir si es la solucion optima (por mas de que es una solucion factible)
+
+#### Internal Scheduling
+
+Tenemos un conjunto de tareas S={1,2,..., n}. La i-ésima tarea empieza en el horario s(i) y termina en el horario f(i) (y no se pueden modificar ni interrumpir).
+
+Definición: un subconjunto de tareas es compatible si no hay solapamiento entre ellas
+
+![img](img/greedy_3.png)
+
+Solo nos interesa la *cantidad* en este problema. El algoritmo greedy que se propone es:
+
+- Seleccionar una tarea i1 siguiendo una regla sencilla
+- Rechazar todas las tareas que no sean compatibles
+- Seleccionar la segunda tarea i2 para su consideración
+- Rechazar todas las tareas que no sean compatibles con i2
+- Repetir hasta que no queden tareas
+
+Se puede tener en consideracion una tarea de menor tamaño, o la primer tarea que comienza lo antes posible...
+
+- Opción 1: Tomar la próxima tarea que empiece lo antes posible. (no es buena idea)
+- Opción 2: Tomar la próxima tarea más corta posible. (no es buena idea)
+- Opción 3: Tomar la próxima tarea que termine antes.
+
+![img](img/greedy_4.png)
+
+```python
+def scheduling(tareas)
+  tareas_ordenadas=ordenar_tareas_por_fin(tareas) # O(n log n)
+  calendario=[]
+  for tarea in tareas_ordenadas: # O(n)
+    if len(calendario)==0 or not incompatibles(calendario[-1], tarea) # O(1)
+      calendario.append(tarea)
+  return calendario
+
+def incompatibles(anterior, posterior)
+  return posterior[INICIO] < anterior[FIN]
+```
+
+Complejidad del algoritmo:
+`O(n log n) * O(n) * O(1) = O(n^2)`
+
+
+
+### Codigos de Huffman
+
+Usados para compresión de datos sin pérdidas, permiten encontrar una codificación basada en la frecuencia de aparición de los símbolos, y reducir la longitud promedio de los códigos.
+
+El objetivo es que los símbolos más frecuentes puedan ser codificados con menos bits que los menos frecuentes. El algoritmo de generación usa un heap (de mínimo) para mantener los símbolos según sus frecuencias.
+
+#### Codificacion
+
+- Determinar la frecuencia de los símbolos del mensaje
+- Cargar los símbolos y sus frecuencias en un heap
+- Mientras el heap no esté vacío:
+  - Tomar los próximos dos elementos del heap, “x”, “y”
+  - Construir un nuevo símbolo “xy” con frecuencia igual a la suma de las frecuencias de “x” y de “y”
+  - Agregar al heap el nuevo símbolo “xy” con su frecuencia
+  - Agregar al árbol T una nueva hoja “xy” con su frecuencia.
+  - Agregar debajo de la nueva hoja “xy” los nodos para “x” e “y” con sus frecuencias
+- Construir el código de Huffman asignando 0 y 1 a las aristas del árbol (una vez termine el loop)
+
+**Regla greedy**: tomar los proximos dos elementos del heap. Esta regla, junto a la iteracion, son fundamentales en un *Algoritmo Greedy*
+
+#### Ejemplo de Codigo de Huffman
+
+Palabra: ABRACADABRA. Tabla de frecuencias:
+
+| C | D | B | R | A |
+| - | - | - | - | - |
+| 1 | 1 | 2 | 2 | 5 |
+
+Primer iteracion:
+![img](img/huffman_1.png)
+| B | R | CD | A |
+| - | - | -- | - |
+| 2 | 2 | 2  | 5 |
+
+Segunda iteracion:
+![img](img/huffman_2.png)
+| CD | BR | A |
+| -- | -- | - |
+| 2  | 4  | 5 |
+
+Tercer iteracion:
+![img](img/huffman_3.png)
+| A | CDBR |
+| - | ---- |
+| 5 | 6    |
+
+Ultima iteracion:
+![img](img/huffman_4.png)
+| CDBRA |
+| ----- |
+| 11    |
+
+Ya luego de esta ultima iteracion, el heap no tiene mas elementos.
+
+**Decodificacion**: El emisor envía el mensaje codificado junto con la tabla de frecuencias (estas son las dos unicas cosas que el receptor debe saber), y el receptor construye el código de Huffman y decodifica el mensaje.
+
+![img](img/huffman_5.png)
+*ABRACADABRA*: 1-010-011-1-000-1-001-1-010-011-1 (19 bits)
+
+No hace falta señalar con guiones debido a que es un codigo prefijo.
+
+Este es un *algoritmo greedy* debido a que agarro un par de elementos del heap por frecuencia cresciente.
+
+- Regla sencilla: tomar el próximo par de símbolos, que están priorizados de menor a mayor frecuencia de aparición.
+- Un símbolo con baja frecuencia terminará siendo representado con más bits, y viceversa.
+
+En resumen, reformulando la regla sencilla,*Agregar un bit más a los dos símbolos que menor frecuencia acumulan*.
+
+```python
+def huffman(mensaje)
+  frecuencias=calcular_frecuencias(mensaje) # O(n)
+  q=heap_crear()
+  for simbolo in frecuencias #  O(n)
+    q.encolar(Hoja(simbolo, frecuencias))
+  while q.cantidad > 1 # O()
+    t1=q.desencolar()
+    t2=q.desencolar()
+    q.encolar(Arbol(t1, t2, t.frecuencia + t2.frecuencia)) # O(1)
+  return codificar(mensaje, q.desencolar())
+```
+
+Complejidad temporal:
+`O(n) + O(m log m) + O(m) * O(1) + O(m^2) = O(n + m^2)`
+
+
+
+### Problema del cambio de monedas
+
+Dado un sistema monetario S formado por n monedas S={m1, m2, …, mn}, encontrar la mínima cantidad de monedas necesarias para sumar cierto monto de dinero.
+
+**Regla greedy**: usemos la moneda de mayor denominacion posible todas las veces que se pueda.
+
+Descripcion del algoritmo:
+
+- Ordenar las monedas por denominación, de mayor a menor
+- Tomar la próxima denominación
+- Determinar cuántas veces entra la denominación en el monto a dar
+- Tomar el resto de la división entera
+- Repetir 2 hasta que el resto de la división entera sea cero
+
+Ejemplo: S = {1, 2, 5, 10, 50, 100} (S = Sistema monetario)
+
+- Monto: 22. Solución: 2 monedas de 10, una moneda de 2
+- Monto: 40. Solución: 4 monedas de 10
+- Monto: 23. Solución: 2 monedas de 10, una de 2, una de 1
+- Monto: 40. Solución: 1 moneda de 25, una de 10, una de 5. O mejor, dos monedas de 20.
+
+Este algoritmo esta fuertemente atado al sistema monetario, por lo que de esto depende la optimalidad del algoritmo.
+
+### Otro problema: *compras con inflacion*
+
+- Se tiene un conjunto de n productos a comprar, cada uno con un precio p_i>1
+- Sólo se puede comprar un producto por día.
+- Por cada día que pasa, los productos aumentan de precio en una tasa t>1, de manera que luego de d días, el valor de p_i es p_i t^d
+
+¿En qué orden habría que comprar los productos para que el costo total sea mínimo? Primero se compra el mas caro.
+
+Posible algoritmo:
+
+- Ordenar los productos por precio, de mayor a menor
+- Tomar el próximo producto
+- Acumular el costo
+- Remover el producto
+- Repetir desde 2 hasta que no queden más productos
+
+Se puede demostrar que este algoritmo es óptimo.
+
+Si hubiera habido *deflacion*, habria que comprar primero el mas barato, ya que la disminucion de precio va a ser menor a comparacion del producto mas caro.
+
+### Otro problema: *carga de combustible*
+
+- Un camión debe recorrer una distancia r para ir desde un punto a otro
+- Puede recorrer una distancia máxima k con su tanque lleno (autonomía)
+- Las sucesivas estaciones de servicio (ei-1; ei) a lo largo de la ruta están separadas por una distancia di.
+
+Determinar: *en qué estaciones debe detenerse a cargar combustible para que la cantidad total de paradas sea la mínima posible*.
+
+**Regla greedy**: aplazar la carga lo mas posible.
+
+Posible algoritmo:
+
+- Inicializar el odómetro parcial Op=0
+- Tomar la distancia d a la siguiente estación
+- Si d > k - Op
+  - Cargar combustible
+  - Reiniciar el odómetro parcial Op=0
+- Si no
+  - Op = Op + d
+- Repetir hasta llegar a destino
+
+---
+
+## Clase 12/09
