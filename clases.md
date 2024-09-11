@@ -442,7 +442,11 @@ Recorre un grafo para encontrar el camino minimo desde un vertice hasta otro.
 
 Se usa para grafos ponderados (con peso), y no debe tener pesos o ciclos con pesos negativos.
 
+¿Cómo funciona el algoritmo de Dijkstra?
 
+- Parte de un vértice
+- Busca el siguiente vértice que haga mínimo el camino completo
+- Se apoya en un heap para mejorar la búsqueda del siguiente vértice
 
 Este algoritmo funciona usando un heap de minimos guardando las aristas, para que nos devuelva la arista mas pequeña conectada con el vertice de esa iteracion.
 
@@ -454,15 +458,13 @@ Dijkstra es un *algoritmo Greedy*. La “regla sencilla” es que toma el próxi
 
 Busca el arbol de tendido minimo, donde el peso total de las aristas es el minimo posible para grafos ponderados.
 
-El algoritmo parte de un
-
-
+El funcionamiento del algoritmo es el siguiente: parte de un vertice arbitrario, busca la siguiente arista de menor peso posible, y controla que no se formen ciclos.
 
 Prim también es un *algoritmo Greedy*. La “regla sencilla” es que toma la arista de menor peso que aún no se insertó. Repite la regla en cada paso. El control de que no se formen ciclos es una restricción del árbol que se desea armar, no de la regla greedy.
 
 #### Algoritmo de Kruskal
 
-Tambien busca el arbol de tendido minimo. Al igual que prim, ordena las aristas por peso e incorpora la salida de menor peso. 
+Tambien busca el arbol de tendido minimo. Al igual que prim, ordena las aristas por peso e incorpora la salida de menor peso. Este algoritmo tambien es para grafos ponderados.
 
 Funcionamiento:
 
@@ -495,7 +497,7 @@ Ventajas:
 
 Un **algoritmo greedy** es muy facil de entender, programar y ejecutar, pero la solucion puede ser muy mala, y a veces es muy complicado definir si es la solucion optima (por mas de que es una solucion factible)
 
-#### Internal Scheduling
+#### Interval Scheduling
 
 Tenemos un conjunto de tareas S={1,2,..., n}. La i-ésima tarea empieza en el horario s(i) y termina en el horario f(i) (y no se pueden modificar ni interrumpir).
 
@@ -528,14 +530,12 @@ def scheduling(tareas)
       calendario.append(tarea)
   return calendario
 
-def incompatibles(anterior, posterior)
+def incompatibles(anterior, posterior) # O(1)
   return posterior[INICIO] < anterior[FIN]
 ```
 
 Complejidad del algoritmo:
-`O(n log n) * O(n) * O(1) = O(n^2)`
-
-
+`O(n log n) + O(n) * O(1) = O(n log n)`
 
 ### Codigos de Huffman
 
@@ -594,6 +594,7 @@ Ya luego de esta ultima iteracion, el heap no tiene mas elementos.
 **Decodificacion**: El emisor envía el mensaje codificado junto con la tabla de frecuencias (estas son las dos unicas cosas que el receptor debe saber), y el receptor construye el código de Huffman y decodifica el mensaje.
 
 ![img](img/huffman_5.png)
+
 *ABRACADABRA*: 1-010-011-1-000-1-001-1-010-011-1 (19 bits)
 
 No hace falta señalar con guiones debido a que es un codigo prefijo.
@@ -603,25 +604,24 @@ Este es un *algoritmo greedy* debido a que agarro un par de elementos del heap p
 - Regla sencilla: tomar el próximo par de símbolos, que están priorizados de menor a mayor frecuencia de aparición.
 - Un símbolo con baja frecuencia terminará siendo representado con más bits, y viceversa.
 
-En resumen, reformulando la regla sencilla,*Agregar un bit más a los dos símbolos que menor frecuencia acumulan*.
+En resumen, reformulando la regla sencilla, *Agregar un bit más a los dos símbolos que menor frecuencia acumulan*.
 
 ```python
 def huffman(mensaje)
   frecuencias=calcular_frecuencias(mensaje) # O(n)
-  q=heap_crear()
-  for simbolo in frecuencias #  O(n)
+  q=heap_crear() # O(1)
+  for simbolo in frecuencias #  O(m log m)
     q.encolar(Hoja(simbolo, frecuencias))
-  while q.cantidad > 1 # O()
+  while q.cantidad > 1 # O(m log m)
     t1=q.desencolar()
     t2=q.desencolar()
-    q.encolar(Arbol(t1, t2, t.frecuencia + t2.frecuencia)) # O(1)
-  return codificar(mensaje, q.desencolar())
+    q.encolar(Arbol(t1, t2, t.frecuencia + t2.frecuencia))
+  return codificar(mensaje, q.desencolar()) # O(n)
 ```
 
 Complejidad temporal:
-`O(n) + O(m log m) + O(m) * O(1) + O(m^2) = O(n + m^2)`
-
-
+`O(n) + 2 O(m log m) + O(n) = O(n log m)`
+Considerando que m (cantidad de simbolos distintos) <= n (longitud del mensaje)
 
 ### Problema del cambio de monedas
 
