@@ -108,6 +108,13 @@ mapa = [
     [" "," "," "," ","X"," "]
 ]
 
+# REVISAR:
+# X == 1 --> OK
+# X == 2 --> DA 2 MANZANAS PERO NO SON LAS CORRECTAS
+# X == 3 --> DEMASIADOS RESULTADOS
+# X == 4 --> DEMASIADOS RESULTADOS
+# X == 5 --> ROMPE (falta analizar caso desbordamiento del mapa, que pasa si hay restaurantes mas cercanos)
+# X >= 6 --> SUPUESTO: NO PERMITIR DICHOS VALORES (siempre se salen del mapa de 6x6)
 X = 1
 restaurantes = posiciones_restaurante(mapa, X)
 
