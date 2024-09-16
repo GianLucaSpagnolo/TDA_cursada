@@ -567,24 +567,28 @@ Palabra: ABRACADABRA. Tabla de frecuencias:
 
 Primer iteracion:
 ![img](img/huffman_1.png)
+
 | B | R | CD | A |
 | - | - | -- | - |
 | 2 | 2 | 2  | 5 |
 
 Segunda iteracion:
 ![img](img/huffman_2.png)
+
 | CD | BR | A |
 | -- | -- | - |
 | 2  | 4  | 5 |
 
 Tercer iteracion:
 ![img](img/huffman_3.png)
+
 | A | CDBR |
 | - | ---- |
 | 5 | 6    |
 
 Ultima iteracion:
 ![img](img/huffman_4.png)
+
 | CDBRA |
 | ----- |
 | 11    |
