@@ -32,6 +32,8 @@ def detectar_monedas_falsa(monedas, start_index, end_index):
 
 def wrapper_detectar_moneda_falsa_dyc(monedas):
     """
+    A revisar...
+    
     Versión Division y Conquista:
 
     Complejidad temporal (teorema maestro):

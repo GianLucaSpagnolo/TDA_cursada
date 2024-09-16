@@ -18,7 +18,7 @@ def test_moneda_falsa_random(cantidad):
     assert moneda_lineal == moneda_rec
     print(f"{cantidad} monedas (random: posicion {random_pos})")
     print(f"Moneda falsa (lineal): {moneda_lineal}. Tiempo: {time_lineal:.8f}")
-    print(f"Moneda falsa    (rec): {moneda_rec}. Tiempo: {time_rec:.8f}\n")
+    print(f"Moneda falsa    (dyc): {moneda_rec}. Tiempo: {time_rec:.8f}\n")
 
 def test_modena_falsa_inicio(cantidad):
     bolsa_de_monedas = [9] + [10]*(cantidad - 1)
@@ -31,7 +31,7 @@ def test_modena_falsa_inicio(cantidad):
     assert moneda_lineal == moneda_rec
     print(f"{cantidad} monedas (caso inicio)")
     print(f"Moneda falsa (lineal): {moneda_lineal}. Tiempo: {time_lineal:.8f}")
-    print(f"Moneda falsa    (rec): {moneda_rec}. Tiempo: {time_rec:.8f}\n")
+    print(f"Moneda falsa    (dyc): {moneda_rec}. Tiempo: {time_rec:.8f}\n")
 
 def test_modena_falsa_final(cantidad):
     bolsa_de_monedas = [10]*(cantidad - 1) + [9]
@@ -44,7 +44,7 @@ def test_modena_falsa_final(cantidad):
     assert moneda_lineal == moneda_rec
     print(f"{cantidad} monedas (caso final)")
     print(f"Moneda falsa (lineal): {moneda_lineal}. Tiempo: {time_lineal:.8f}")
-    print(f"Moneda falsa    (rec): {moneda_rec}. Tiempo: {time_rec:.8f}\n")
+    print(f"Moneda falsa    (dyc): {moneda_rec}. Tiempo: {time_rec:.8f}\n")
 
 
 # Testeo de casos de prueba
