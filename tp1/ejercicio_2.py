@@ -76,7 +76,7 @@ def contar_edificios_a_radio_x_de_manzana(mapa, x, manzana):
 def max_by_value(dict_):
     max_val = max(dict_.values())
     res = list(filter(lambda x: dict_[x] == max_val, dict_))
-    return res[0]
+    return res
 
 
 def posiciones_restaurante(mapa, x):
@@ -92,11 +92,11 @@ def posiciones_restaurante(mapa, x):
         for manzana in manzanas_a_radio_x_del_edificio(mapa, x, edi):
             edificios_a_radio_x_de_manzana[manzana] = contar_edificios_a_radio_x_de_manzana(mapa, x, manzana)
 
-        manzana_max = max_by_value(edificios_a_radio_x_de_manzana)
+        manzana_max = max_by_value(edificios_a_radio_x_de_manzana)[0]
 
         restaurantes.append(manzana_max)
 
-    return restaurantes
+    return sorted(list(set(restaurantes)))
 
 
 mapa = [
