@@ -4,10 +4,13 @@ Teoria de Algoritmos (TB024) curso 02: Echeverria
 
 Segundo cuatrimestre 2024
 
+## Clases
+
 - [Clase 03/09](#clase-0309)
 - [Clase 05/09](#clase-0509)
 - [Clase 10/09](#clase-1009)
 - [Clase 12/09](#clase-1209)
+- [Clase 17/09](#clase-1709)
 
 ## Modalidad
 
@@ -147,7 +150,7 @@ Notacion tipica:
 - Dos vertices U y V estan conectados si existe una arista que los une.
 - **Componente (o Componente Conexa)**: Subgrafo en el que cualquier par de vertices esta conectado por un camino
 
-**Grafos No Dirigidos**: Componentes conexas (todos conectados entre si). Tiene puntos de articulacion: vertices tales que, si son removidos, aumenta la cantidad de componentes conexas del grafo.
+**Grafos No Dirigidos**: Componentes conexas (todos conectados entre si). Tiene *puntos de articulacion*: vertices tales que, si son removidos, aumenta la cantidad de componentes conexas del grafo.
 
 ![img](img/grafos_1.png)
 
@@ -694,3 +697,244 @@ Posible algoritmo:
 ---
 
 ## Clase 12/09
+
+todo
+
+---
+
+## Clase 17/09
+
+### Fuerza Bruta
+
+Tratando de buscar una solucion a un problema, explorando todas las soluciones factibles y no factibles.
+
+Es sencillo pero muy ineficiente, y poco practico mientras mas grande sea el problema.
+
+Un algoritmo de fuerza bruta tiene más o menos esta forma:
+
+- Repetir:
+  - Generar la próxima solución
+  - Probar si la solución es válida
+- Mientras la solución sea inválida
+
+Funciona bien mientras el problema tenga una cantidad finita de soluciones, pero es terriblemente lento.
+
+#### Problema del Viajante (por fuerza bruta)
+
+- Plantearíamos todas las posibles combinaciones de ciclos
+- calcularíamos el peso para cada uno
+- seleccionaríamos el de menor peso
+
+#### El Problema de la Mochila (por fuerza bruta)
+
+- Plantearíamos todas las posibles combinaciones
+- Descartaríamos las que exceden el peso máximo
+- Seleccionaríamos la que maximiza el valor total
+
+#### El Problema de Interval Scheduling (por fuerza bruta)
+
+- Plantearíamos todas las combinaciones de tareas
+- Descartaríamos las que tienen solapamiento
+- Seleccionaríamos la que tenga mayor cantidad de tareas
+
+### Backtracking
+
+"La filosofia de backtracking es: avanzar, si me equivoco retroceder un paso e intentar por otro camino"
+
+Son un refinamiento de *Fuerza Bruta*, ya que exploran todas las soluciones, pero descartan algunas.
+
+La soluciones se van construyendo incrementalmente, verificando si son validas o no. En el peor escenario puede recorrer todas las posibles soluciones.
+
+Sólo se puede usar **Backtracking** en problemas tales que:
+
+- Permitan construir incrementalmente una solución.
+- Se pueda determinar rápidamente si  una solución parcial se puede completar hasta obtener una válida.
+
+Cuando se puede usar Backtracking, se logra una mejora en velocidad frente a Fuerza Bruta (puede eliminar muchas soluciones candidatas con una sola verificación).
+
+#### Conceptos de Backtracking
+
+- **Candidato Parcial**: una solución incompleta
+  - Se pueden representar mediante un árbol:
+    - Los hijos se diferencian del padre por tener un valor más
+    - Los hijos son también candidatos parciales
+- **Árbol de Decisión**: estructura para representar a todos los candidatos parciales de un problema
+
+##### Arbol de Decisiones
+
+*Backtracking* recorre el Arbol de Decisiones siguiendo **DFS**
+
+![img](img/arbol_de_decisiones.png)
+
+Cada nodo del Arbol de Decisiones son soluciones incompletas.
+
+Backtracking toma un candidato posible y los va completando incrementalmente.
+
+Podría haber muchas maneras de completar el candidato: algunas válidas, otras no. Si un candidato parcial no es válido, la rama se “poda” junto con sus hijos
+
+#### Funcionamiento de Backtracking
+
+Backtracking *naturalmente sale recursivo*
+
+Recorre recursivamente el Árbol de Decisiones usando DFS:
+
+- Verifica el candidato parcial:
+  - Si es la solución:
+    - la devuelve
+- Incrementa el candidato parcial
+- Si no es válido:
+  - retrocede y vuelve a 2
+- Si es válido:
+  - recorre recursivamente desde 1 con el candidato parcial actual
+- Llegado a este punto, el problema no tiene solución
+
+#### Problemas de las N Reinas
+
+Se tiene un tablero de ajedrez de n x n casillas. Se tienen n reinas y las reinas atacan en dirección horizontal, vertical y diagonal.
+
+Se desean ubicar n reinas en el tablero de forma tal que ninguna pueda atacar a otra.
+
+Analisis:
+
+- Una solución tendría la forma {e1,e2,.., en}, donde cada elemento ei indica la ubicación en el tablero de la i-ésima reina
+- Habría nn posibles permutaciones soluciones
+- Primer poda: las reinas deben estar en ubicaciones distintas ⇒ bajamos a n! soluciones posibles
+
+![img](img/problema_n_reinas_1.png)
+
+![img](img/problema_n_reinas_2.png)
+
+Conclusion: no se puede resolver el problema de las N reinas siendo N = 3, debido a que las 
+
+### Independent Set
+
+Con un grafo G = {V,E}, un **independent set** S de G es un conjunto de vértices tal que para todo par de vértices {v_i, v_j} de S no existe arista e_ij en E que los una.
+
+Por ejemplo: hallar un independent set de G de tamaño k
+
+- Tenemos un grafo G={V,E}
+- Queremos guardar k elementos en algunos vértices del grafo
+- No queremos que los vértices seleccionados sean adyacentes
+
+Análisis: Las soluciones tendrán la forma {v1, v2, …, vk} donde vi indica el vértice seleccionado.
+
+La resolucion de este problema, usando **Fuerza Bruta**, al analizar cada vertice es analizado buscando verificar si cada solucion posible es una solucion completa. Esto puede tomar mucho tiempo.
+
+Secuencia de pasos por Fuerza Bruta:
+
+- Primero construye una solución completa
+- Después la verifica
+- Si no es compatible, construye otra solución completa
+- Explora TODAS las soluciones completas que existan
+
+Por otro lado, la resolucion usando **Backtracking** no se espera tener una solucion completa.
+
+![img](img/independent_set_backtracking.png)
+
+Debido a que va recorriendo uno por uno los vertices, sin buscar soluciones completas, es posible analizar y llegar a una solucion completa muchisimo mas rapido debido a que va descartando vertices que no sirven para armar soluciones completas.
+
+```python
+def ubicacion_bt(grafo, vertices, v_actual, puestos, k):
+  if len(puestos) == k:
+    return es_compatible(grafo, puestos)
+  if v_actual == len(grafo):
+    return False
+
+  # Surtido de Podas:
+  if not es_compatible(grafo, puestos):
+    return False  
+  if ya_no_llego(grafo, vertices, v_actual, puestos):
+    return False
+
+  puestos.add(vertices[v_actual])
+  if ubicacion_bt(grafo, vertices, v_actual+1, puestos, k):
+    return True
+  puestos.remove(vertices[v_actual])
+  return ubicacion_bt(grafo, vertices, v_actual+1, puestos, k)
+
+# Version 2 - O(n)
+# grafo: grafo a recorrer
+# puestos: lista con los vértices seleccionados
+# ultimo: último vértice seleccionado
+def es_compatible(grafo, puestos, ultimo_puesto):
+  for w in puestos:
+    if ultimo_puesto == w: continue
+    if grafo.hay_arista(ultimo_puesto,w)
+      return False
+  return True
+```
+
+Secuencia de pasos por Backtracking:
+
+- Construye incrementalmente la solución completa
+- En cada incremento, verifica si el candidato parcial es compatible
+- Si no es compatible, descarta (poda), retrocede y avanza por otro camino
+- Si es compatible, continúa incrementando el candidato parcial
+
+En implementacion, es muy similar a la implementacion de *Fuerza Bruta* solo que, el fragmento de codigo correspondiente al **Surtido de Podas**, hace que el algoritmo mejore ampliamente.
+
+#### Complejidad
+
+Por *Fuerza Bruta*, la complejidad temporal es O(2^N).
+
+Por *Backtracking* tambien es exponencial O(2^N) pero *la poda* reduce drasticamente el espacio de soluciones a analizar.
+
+La complejidad entre Fuerza Bruta y Backtracking es igual, pero Backtracking es muchisimo mejor. En el peor caso, ambos tienen complejidad O(2^N) debido a tener que analizar cada set, en cada decision a tomar en el Independent Set, existen dos opciones.
+
+#### Variante de Independent Set
+
+Se tiene un grafo G={V,E}. *Encontrar todos los independent set de G que sean de tamaño k*.
+
+
+
+#### Problema de las N reinas (denuevo)
+
+Si los vertices son las casillas del tablero, y las aristas son las casillas que no podrian tener otra reina...
+
+Se trata del mismo problema del Independent Set
+
+### Camino Hamiltoneano
+
+
+
+Lo mas practico para recorrer un Camino Hamiltoneano es un DFS.
+
+```python
+# grafo: grafo a recorrer
+# v: vértice actual
+# visitados: vértices ya visitados
+# camino: camino realizado
+def camino_hamiltoniano_dfs(grafo, v, visitados, camino):
+  ### DFS
+  visitados.add(v)
+  camino.append(v)
+  if len(visitados) == len(grafo)
+    return True
+  for w in grafo.adyacentes(v):
+    if w not in visitados: # La poda
+      if camino_hamiltoniano_dfs(grafo, w, visitados, camino):
+        return True
+
+  ### Backtracking
+  visitados.remove(v) # permitir volver por otro camino
+  camino.pop()
+  return False
+
+# grafo: grafo a recorrer
+def camino_hamiltoniano(grafo):
+  ### Control de Puntos de Articulacion
+  camino = []
+  visitados = set()
+  for v in grafo:
+    if camino_hamiltoniano_dfs(grafo, v, visitados, camino):
+      return camino
+  return None
+```
+
+Debido a que el Camino Hamiltoneano se puede comenzar desde cada vertice, la funcion `camino_hamiltoneano()` es la que llama a la funcion `camino_hamiltoneano_dfs()` 
+
+Con el Camino Hamiltoneano, se deben recorrer todos los vertices al menos una vez.
+
+
+
+---
