@@ -11,6 +11,7 @@ Segundo cuatrimestre 2024
 - [Clase 10/09](#clase-1009)
 - [Clase 12/09](#clase-1209)
 - [Clase 17/09](#clase-1709)
+- [Clase 19/09](#clase-1909)
 
 ## Modalidad
 
@@ -698,7 +699,291 @@ Posible algoritmo:
 
 ## Clase 12/09
 
-todo
+### Otro problema greedy: **Problema de la Mochila**
+
+"Un problema donde necesito que todos los elementos que tengo entren en una mochila..."
+
+- Se tiene una mochila con una capacidad máxima w
+- Se tienen n objetos que ocupan una capacidad wi y tienen un valor vi
+- Cada objeto puede incluirse en la mochila (si cabe) o ser excluido
+
+Se desea determinar qué elementos poner en la mochila de forma tal que el valor total de los objetos incluidos sea máximo
+
+#### Reglas Greedy
+
+**Alternativa 1**: agregar el próximo elemento de menor peso
+
+- Ordenar los objetos según su peso, de menor a mayor
+- Mientras quede capacidad, incorporar el próximo objeto
+
+![img](img/mochila_1.png)
+
+En este caso, el algoritmo greedy falla.
+
+**Alternativa 2**: agregar el próximo elemento de mayor valor
+
+- Ordenar los objetos según su valor, de mayor a menor
+- Mientras quede capacidad, incorporar el próximo objeto
+
+![img](img/mochila_2.png)
+
+Esta alternativa tambien falla.
+
+**Alternativa 3**: agregar el próximo elemento de mejor ponderación valor/peso
+
+- Ordenar los objetos según su relación valor/peso, de mayor a menor
+- Mientras quede capacidad, incorporar el próximo objeto
+
+![img](img/mochila_3.png)
+
+Esta ponderacion valor/peso tampoco nos da una solucion optima.
+
+Complejidad temporal de este algoritmo:
+
+- Primer paso, ordenar = O(N log N)
+- Itera la lista ordenada (en el peor de los casos = O(N))
+
+Complejidad temporal final = O(N log N) + O(N) = O(N log N)
+
+**Conclusion**: *No se conoce un algoritmo greedy que siempre encuentre la solucion optima al problema de la mochila*
+
+La capacidad de un algoritmo greedy de encontrar una solucion a este problema de la mochila (u otro problema distinto) va a depender fuertemente de los datos de entrada.
+
+Los algoritmos greedy no siempre encuentran la solucion optima, pero son muy faciles de entender y de implementar.
+
+#### Variante del Problema de la Mochila
+
+Tomemos el problema de la mochila anterior: ¿Cómo cambia si ahora podemos incluir una fracción de cada objeto? ¿Podemos encontrar un algoritmo greedy que SIEMPRE encuentre el óptimo? Respuesta: SI
+
+Se toma en consideracion la ponderacion valor/peso, se toma el elemento con mayor valoracion valor/peso, y se pone todo lo que se pueda de ese objeto (entre 0 y 1 veces, ya que no se puede poner mas de una vez un mismo objeto) hasta agotar el objeto, e ir por el siguiente hasta agotar el espacio de la mochila.
+
+En este caso, **siempre** se va a encontrar la mejor solucion (aunque, estamos trabajando en un espacio de soluciones virtualmente infinito)
+
+De esta forma, una pequeña variacion en el problema puede transformar un algoritmo greedy malo en uno muy conveniente.
+
+### Scheduling con Minimizacion de Retrasos
+
+- Tenemos un conjunto de tareas S={1,2,..., n}
+- La i-ésima tarea tiene un deadline d_i y una duración t_i
+- Pueden empezar en cualquier momento, pero no pueden ser interrumpidas
+- No puede haber solapamiento entre las tareas
+- Si termina después de su deadline, hay una penalización
+- **Todas** las tareas deben ser ejecutadas
+
+Queremos encontrar el secuenciamiento de tareas que minimice el retraso total
+
+![img](img/scheduling_retrasos_1.png)
+
+Posibles *Reglas Greedy*:
+
+- Opcion 1:
+
+![img](img/scheduling_retrasos_2.png)
+
+Tomar la tarea de menor duracion parece ser no optimo.
+
+- Opcion 2:
+
+![img](img/scheduling_retrasos_3.png)
+
+Esta regla greedy tampoco llega al optimo.
+
+- Opcion 3:
+
+![img](img/scheduling_retrasos_4.png)
+
+Esta alternativa **siempre** da la solucion optima, a pesar de no tener en cuenta el inicio y el final de las tareas, ni la duracion de las mismas.
+
+Se tiene en cuenta la definicion de **inversion**: Un schedule tiene inversiones si existen dos tareas si, sj tales que i \< j  y di \> dj (es decir, si la tarea si se programó antes que sj, pero sj tiene deadline anterior a si).
+
+![img](img/scheduling_retrasos_5.png)
+
+Si sus deadlines estan invertidos, se trata de una inversion.
+
+El concepto de inversion permite definir la siguiente hipotesis: Sean S1 y S2 dos schedules posibles sin inversiones
+
+Tesis: S1 y S2 tienen la misma demora máxima
+
+Demostración:
+
+Como no tienen inversiones, la única forma de que sean distintos es que haya tareas con el mismo deadline pero secuenciadas en distinto orden, y tienen que ser consecutivas.
+
+La última de estas tareas es la que determina la demora máxima del schedule, y no depende del orden de las tareas.
+
+Las tareas S1 y S2 deben ser consecutivas para cumplir con la regla greedy del algoritmo
+
+![img](img/scheduling_retrasos_6.png)
+
+Esto no demuestra que nuestro algoritmo sea optimo, pero si nos acercamos un paso a la demostracion final.
+
+**Segunda hipotesis**: Sea S un schedule sin inversiones y sin tiempo ocioso entre tareas
+
+Tesis: S es óptimo
+
+Demostración: Supongamos que existe un schedule S’ que es óptimo pero que tiene inversiones. Si tiene inversiones, podría cambiar el orden de las tareas invertidas (que son contiguas). Al invertir las tareas inversibles la solución S’ no puede mejorar (porque ya es óptima) pero tampoco puede empeorar (porque el retraso tampoco cambia): debe quedar igual.
+
+¿Como garantizar que nuestro algoritmo es realmente optimo?
+
+- Dos schedules S y S’ sin inversiones tienen el mismo valor de demora
+- Un schedule S sin inversiones es óptimo
+
+Corolario: Todo schedule S sin inversiones es óptimo
+
+Como nuestro algoritmo genera un schedule sin inversiones, nuestro algoritmo *entrega soluciones óptimas*.
+
+### Coloreo o Particionamiento de Intervalos
+
+- Tenemos un conjunto de tareas S={1,2,..., n}
+- La i-ésima tarea empieza en el horario s(i) y termina en el horario f(i)
+- Tenemos k procesadores para asignarles tareas
+- Un mismo procesador no puede ejecutar dos tareas a la vez
+- Se deben asignar **todas** las tareas
+- Cuidado: si k es demasiado pequeño, puede no existir solución
+
+Encontrar (si existe) la asignación de tareas a procesadores que haga mínima la cantidad de procesadores utilizados
+
+![img](img/coloreo_intervalos.png)
+
+Esquema general para plantear el algoritmo greedy:
+
+- Seleccionar una tarea i_1 siguiendo una regla sencilla
+- Si es posible:
+  - Asignarla a un procesador libre previamente utilizado
+- Si no:
+  - Si quedan procesadores disponibles:
+    - Asignarla a un nuevo procesador
+  - Si no:
+    - El problema no tiene solución
+- Repetir hasta que no queden tareas
+
+¿Que regla greedy se puede tomar?
+
+- Opcion 1: Tomando la tarea que termina antes
+
+![img](img/coloreo_intervalos_2.png)
+
+- Opcion 2: Tomando la tarea que empieza antes
+
+![img](img/coloreo_intervalos_3.png)
+
+En este caso, tomar la tarea que empieza antes para el coloreo de intervalos, siempre encontrara una solucion optima.
+
+### Optimal Caching
+
+- Tenemos un conjunto U de n elementos en la memoria principal
+- Tenemos también una memoria cache C, más rápida, que puede contener k<n elementos
+- C tiene inicialmente k elementos ya cargados
+- Se desea leer una secuencia D=d_1, d_2, …, d_m de elementos desde U.
+- Debemos decidir en todo momento qué k elementos mantener en C para un acceso más rápido
+- Si el elemento d_i no está en C (cache miss), debe ser buscado en U, incurriendo en una penalización, y debe removerse (evict) un elemento de C para dar lugar a d_i
+
+Objetivo: *Se desea minimizar la cantidad de misses*
+
+El algoritmo de mantenimiento del cache determina un eviction schedule, estableciendo que elementos deben estar en C en todo momento.
+
+Ejemplo de Optimal Caching:
+
+![img](img/optimal_caching.png)
+
+Mejor algoritmo: Farthest in the Future
+
+Remover de C el elemento que se va a usar lo más adelante posible
+
+Se demuestra que es la mejor elección, y es óptima
+
+Sin embargo, esto es solo posible *si se conoce de antemano la secuencia D*. En la vida real, uno no conoce la secuencia D, las lecturas caen y no se conoce el orden futuro de las siguientes lecturas.
+
+Para que sirve? Para testear algoritmos, para ver la mejor situacion posible frente a una secuencia y luego comparar con el cache. **Sirve para encontrar la solucion optima y utilizarla como cota para poder comparar distintos algoritmos que si se pueden usar en la vida real**.
+
+Como en la vida real no contamos con una bola de cristal para predecir la secuencia D, en la práctica, la mejor elección es usar un algoritmo LRU: Least Recently Used. Se resume en remover de C el elemento cuyo último acceso ocurrió hace más tiempo.
+
+### Set Covering
+
+- Se tiene un conjunto de m elementos U={u_1, u_2, …, u_m} (universo) (cantidad finita de elementos)
+- También se tienen n conjuntos de dichos elementos, S={S_1, S_2, …, S_n}, cuya unión es U
+
+Determinar el menor número de conjuntos de S cuya unión aún tiene todos los elementos de U
+
+Ejemplo de Set Covering: Una estación de bomberos tiene la capacidad de cubrir las emergencias tanto de su comuna como de las comunas adyacentes a ella. Se necesitan construir tantas estaciones de bomberos como sea necesario para cubrir todas las comunas ante posibles emergencias, cuidando que todas las comunas estén cubiertas por al menos una estación (una o más), minimizando el número de estaciones construidas.
+
+![img](img/set_covering.png)
+
+Planteamos un algoritmo greedy para resolverlo:
+
+- Seleccionar un conjunto Si siguiendo una regla sencilla
+- Si quedan elementos por incluir:
+  - Remover Si de S
+  - Continuar
+- Si no:
+  - Terminar
+
+¿Cual podria ser una regla greedy sencilla? Seleccionar el conjunto S_i que tenga la mayor cantidad de elementos aún no incluidos
+
+![img](img/set_covering_2.png)
+
+![img](img/set_covering_3.png)
+
+Este algoritmo de Set Covering NO es un algoritmo optimo. Dependiendo de los datos de entrada y de como sea el ordenamiento, se puede llegar a una solucion optima o no.
+
+### Otro problema: Viajante de Comercio
+
+Se tiene una lista de ciudades y las distancias entre ellas. ¿Cuál es la ruta más corta que, partiendo de una de ellas y regresando a la misma, visita todas las ciudades exactamente una vez?
+
+Siguiendo la optica de grafos: Sea G un grafo ponderado G=(V, E) completo. G puede ser dirigido o no dirigido.
+
+Se debe encontrar el **ciclo Hamiltoniano** de menor peso (un camino que empieza y termina en un vertice, y forma un ciclo).
+
+Ejemplo de ciclo Hamiltoneano:
+
+![img](img/ciclo_hamiltoneano.png)
+
+La solución exacta es muy difícil (costosa) de encontrar: hay n! combinaciones para explorar. Sin embargo, su formulación tan simple y su gran dificultad para ser resuelto lo hace muy popular.
+
+Hay muchos tipos de algoritmos para encontrar soluciones (normalmente sub-óptimas):
+
+- Greedy
+- Búsqueda Tabú
+- Simulated Annealing
+- Colonias de Hormigas
+- Algoritmos Genéticos
+
+Generalmente, en el problema del viajante, si encontramos una solucion rapida seguramente no sea la solucion optima. No se conoce un algoritmo rapido (en terminos de complejidad) que encuentre una solucion optima.
+
+¿Posibles reglas greedy?
+
+Por ejemplo: seleccionar el vecino más cercano.
+
+- Ordenar la lista de tramos por distancia, de menor a mayor
+- Tomar la ciudad origen
+- Buscar el tramo más corto que parta de la ciudad actual y que no cierre el ciclo
+- Acumular la distancia recorrida por el tramo seleccionado
+- Remover los tramos que salen de la ciudad actual
+- Remover los tramos que llegan a la siguiente ciudad
+- Avanzar hasta la nueva ciudad
+- Repetir desde 3 hasta que no queden ciudades por visitar
+- Sumar la distancia desde la última ciudad visitada hacia el origen. Este paso es necesario para cerrar el ciclo al terminar
+
+![img](img/viajante_comercio_1.png)
+
+![img](img/viajante_comercio_2.png)
+
+![img](img/viajante_comercio_3.png)
+
+![img](img/viajante_comercio_4.png)
+
+![img](img/viajante_comercio_5.png)
+
+![img](img/viajante_comercio_6.png)
+
+Peso final = 1+2+2+2+5 = 12
+
+![img](img/viajante_comercio_7.png)
+
+Si se realizaba esta secuencia, la distancia hubiera sido 10 debido a que este algoritmo greedy tampoco es optimo. En este caso, este algoritmo falla debido a que *puede (en realidad va a) dejar para el final las aristas de mayor peso*.
+
+Esto ultimo puede hacer que, cuando se vaya a cerrar el ciclo, esto se lo haga con una arista muy pesada.
+
+Si los pesos de todas las aristas son similares, nuestro algoritmo greedy puede llegar a darnos una solucion optima o al menos una muy parecida a la solucion optima. Sin embargo, si los pesos son muy dispares, seguro vaya a ser una solucion sub-optima.
 
 ---
 
@@ -933,8 +1218,10 @@ def camino_hamiltoniano(grafo):
 
 Debido a que el Camino Hamiltoneano se puede comenzar desde cada vertice, la funcion `camino_hamiltoneano()` es la que llama a la funcion `camino_hamiltoneano_dfs()` 
 
-Con el Camino Hamiltoneano, se deben recorrer todos los vertices al menos una vez.
+Con el Camino Hamiltoneano, se deben recorrer todos los vertices al menos una vez, pero hay que tener cuidado con los **puntos de articulacion**.
 
 
 
 ---
+
+## Clase 19/09
