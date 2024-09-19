@@ -6,11 +6,11 @@ Segundo cuatrimestre 2024
 
 ## Clases
 
-- [Clase 03/09](#clase-0309)
-- [Clase 05/09](#clase-0509)
-- [Clase 10/09](#clase-1009)
-- [Clase 12/09](#clase-1209)
-- [Clase 17/09](#clase-1709)
+- [Clase 03/09: Introduccion - Repaso - Grafos](#clase-0309)
+- [Clase 05/09: Grafos - DyC](#clase-0509)
+- [Clase 10/09: Greedy 1](#clase-1009)
+- [Clase 12/09: Greedy 2](#clase-1209)
+- [Clase 17/09: Backtracking 1](#clase-1709)
 - [Clase 19/09](#clase-1909)
 
 ## Modalidad
@@ -1089,7 +1089,7 @@ Analisis:
 
 ![img](img/problema_n_reinas_2.png)
 
-Conclusion: no se puede resolver el problema de las N reinas siendo N = 3, debido a que las 
+Conclusion: no se puede resolver el problema de las N reinas siendo N = 3, debido a que las soluciones son incompatibles. En el nivel de las hojas estarian las soluciones de las combinatorias por fuerza bruta, pero ninguna de las dos cumplen con la definicion del problema. Se debe probar con un N mas grande.
 
 ### Independent Set
 
@@ -1170,17 +1170,36 @@ La complejidad entre Fuerza Bruta y Backtracking es igual, pero Backtracking es 
 
 Se tiene un grafo G={V,E}. *Encontrar todos los independent set de G que sean de tamaño k*.
 
+¿Como se modifica el algoritmo? En esta variante, al intentar encontrar todos los independent set, a diferencia del algoritmo anterior (que al encontrar el primero, termina), en esta variante no alcanza con encontrar 1.
 
+Lo que devuelve el llamado resursivo no sera solamente true o false.
+
+Cuando termina de recorrer todo el arbol de decision, ya se sabe que no se encontraran mas independent set del tamaño K.
 
 #### Problema de las N reinas (denuevo)
 
 Si los vertices son las casillas del tablero, y las aristas son las casillas que no podrian tener otra reina...
 
-Se trata del mismo problema del Independent Set
+Se trata del mismo problema del Independent Set. (Aunque, no conviene visualizarlo como grafos debido a que habria muchisimas aristas)
+
+En conclusion, este problema presenta una dualidad: se puede representar como el problema de las N reinas, o como el de independent set.
+
+**Sirve conocer diferentes problemas y diferentes algoritmos** para poder readaptar lo que ya sabemos.
 
 ### Camino Hamiltoneano
 
+Un camino hamiltoneano recorre todos los vrrtices sin repetirlos. Este camino **no es un ciclo**. En este problema no nos preocupa el peso de las aristas, unicamente si es ponderado o no, solamente queremos encontrar un camino.
 
+Ejemplo:
+
+![img](img/camino_hamiltoneano.png)
+
+Intento por backtracking:
+
+- [1, 3, 4, 5, 7, 8, 2] es invalido, falta el 6
+- [1, 3, 4, 5, 6] es invalido, faltan todos los demas
+
+En este caso, el nodo 6 es un **punto de articulacion**. Cuando se intenta resolver un camino hamiltoneano hay que tener cuidado con dos cosas: no cerrar el ciclo, y los puntos de articulacion.
 
 Lo mas practico para recorrer un Camino Hamiltoneano es un DFS.
 
@@ -1190,7 +1209,7 @@ Lo mas practico para recorrer un Camino Hamiltoneano es un DFS.
 # visitados: vértices ya visitados
 # camino: camino realizado
 def camino_hamiltoniano_dfs(grafo, v, visitados, camino):
-  ### DFS
+  ### Recorrido DFS:
   visitados.add(v)
   camino.append(v)
   if len(visitados) == len(grafo)
@@ -1200,14 +1219,14 @@ def camino_hamiltoniano_dfs(grafo, v, visitados, camino):
       if camino_hamiltoniano_dfs(grafo, w, visitados, camino):
         return True
 
-  ### Backtracking
+  ### Backtracking:
   visitados.remove(v) # permitir volver por otro camino
   camino.pop()
   return False
 
 # grafo: grafo a recorrer
 def camino_hamiltoniano(grafo):
-  ### Control de Puntos de Articulacion
+  ### Control de Puntos de Articulacion:
   camino = []
   visitados = set()
   for v in grafo:
@@ -1216,11 +1235,109 @@ def camino_hamiltoniano(grafo):
   return None
 ```
 
-Debido a que el Camino Hamiltoneano se puede comenzar desde cada vertice, la funcion `camino_hamiltoneano()` es la que llama a la funcion `camino_hamiltoneano_dfs()` 
+Debido a que el Camino Hamiltoneano se puede comenzar desde cada vertice, la funcion `camino_hamiltoneano()` es la que llama a la funcion `camino_hamiltoneano_dfs()` con el objetivo de chequear si desde cada vertice se puede construir un camino hamiltoneano, para manejar los puntos de articulacion (posiblemente comenzando por ese mismo) de modo de que aquel nodo no quede sin visitar.
+
+(En el ejemplo de la imagen anterior, el nodo por el cual se deberia comenzar es el nodo 6).
 
 Con el Camino Hamiltoneano, se deben recorrer todos los vertices al menos una vez, pero hay que tener cuidado con los **puntos de articulacion**.
 
+No confunfir con los **ciclos Hamiltoneanos**
 
+### Coloreo de Grafos
+
+Tenemos un grafo G=(V, E) y queremos asignar un color a cada vertice v_i en V. Pero, dos vertices adyacentes v_i, v_j no pueden tener el mismo color.
+
+Problema: *¿Es posible utilizar k colores o menos?*
+
+Peculiaridades:
+
+- Si k=2, entonces estamos tratando de ver si el grafo es bipartito
+  - Problema “fácil”: se resuelve con DFS o BFS
+- Para k>=3, la cosa se complica muchísimo y rápidamente:
+  - Para un grafo de n vértices, existiría un total de k^n posibles asignaciones de colores (muchas incompatibles)
+
+#### Ejemplo: colorear las provincias Argentinas
+
+Pasos a seguir:
+
+- Si todas las provincias ya están coloreadas:
+  - Devuelvo True
+- Tomo la próxima provincia
+- Pruebo colorear con el próximo color
+- Si no es válido:
+  - Retrocedo y vuelvo a 3, para probar con otro color
+- Si es válido:
+  - Llamo recursivamente (vuelvo a 1) con la lista de provincias/colores actual
+- Si aún no tengo solución:
+  - Vuelvo a 3 para probar con otro color
+- Llegado a este punto, el problema no tiene solución
+
+Con un K = 4, el mapa quedaria asi:
+
+![img](img/coloreo_provincias.png)
+
+En cada paso, se intentaban pintar dos vertices (provincias) con colores distintos si son adyacentes (si comparten o no limite).
+
+Complejidad: como maximo k^n debido a que la cantidad de elementos (volumen de datos) va a depender de n, por lo que es exponencial al tratarse de fuerza bruta.
+
+En el peor de los casos, Backtracking no puede podar nada porque todas las soluciones son validas y termina siendo de fuerza bruta, por lo que en la complejidad algoritmica no se ve reflejada la optimizacion de backtracking.
+
+Conviene usar podas cada vez menos complejas para no matar en complejidad al problema.
+
+### Casco Convexo
+
+Se tiene un conjunto S={s1, s2, …, sn} de puntos en el plano
+
+Definicion: *El casco convexo es el polígono convexo más pequeño que incluye todos los puntos de S.*
+
+![img](img/casco_convexo.png)
+
+Preparacion:
+
+- Buscar el punto s_i con mayor coordenada x; si hay empate, tomar el de menor coordenada y (el punto mas a la derecha y abajo posible).
+- Crear una lista de los puntos restantes ordenada crecientemente según el ángulo que forman con s_i; si hay empate, tomar el más cercano.
+
+Pasos a seguir:
+
+- Si no quedan más puntos:
+  - Devuelvo el punto actual
+- Tomo el próximo punto
+- Calculo el ángulo que forma el punto actual, el punto seleccionado y el punto anterior
+- Si es mayor a 180º:
+  - Retrocedo y vuelvo a 2 para probar con otro punto
+- Si es menor o igual a 180º:
+  - Llamo recursivamente (vuelvo a 1) con el punto actual y el punto seleccionado
+- Si aún no tengo solución:
+  - vuelvo de la llamada recursiva descartando el punto actual.
+
+Ejemplo:
+
+![img](img/casco_convexo_2.png)
+
+Lista de puntos ordenados (respecto de A): [A, B, C, D, E]
+
+![img](img/casco_convexo_3.png)
+
+Comienza por A (el punto mas a la derecha y abajo), toma el proximo punto B (y verifica que la arista tenga un angulo menor a 180 grados: es menor). Desde B se toma el proximo punto C (y verifica que la arista tenga un angulo menor a 180 grados: es menor). Desde C, de la lista de puntos ordenada al inicio toma el proximo punto D (y verifica que la arista tenga un angulo menor a 180 grados entre CD y CB: es menor).
+
+![img](img/casco_convexo_4.png)
+
+Desde D, toma el proximo punto E de la lista de puntos ordenados respecto de A, y mira el punto anterior C, el punto actual D y el punto siguiente E. Verifica el angulo (de CD a DE, en direccion horaria, siempre midiendo el angulo interno) y, al no tratarse de un angulo menor a 180 grados, no sirve el punto D.
+
+![img](img/casco_convexo_5.png)
+
+Vuelvo a C y pruebo la otra alternativa E, aunque el angulo entre BC y CE sigue siendo mayor a 180|, por lo que hay que retroceder denuevo.
+
+![img](img/casco_convexo_6.png)
+
+La otra alternativa desde el punto B es el punto E, donde se mide el angulo y es valido.
+
+Existen otros algoritmos para encontrar el casco convexo:
+
+- Escaneo de Graham (Graham Scan)
+- Marcha de Jarvis (Jarvis March)
+- Algoritmo de Chan (Timothy Chan)
+- Quickhull
 
 ---
 
