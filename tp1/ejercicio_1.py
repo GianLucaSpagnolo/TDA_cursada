@@ -11,15 +11,20 @@ def detectar_moneda_falsa_lineal(bolsa_de_monedas, largo_inicio, largo_fin):
 
 def wrapper_detectar_moneda_falsa_lineal(bolsa_de_monedas):
     """
-    Versión lineal O(n) en su peor caso
+    Versión lineal: O(n) en su peor caso
     """
     return detectar_moneda_falsa_lineal(bolsa_de_monedas, 0, len(bolsa_de_monedas)-1)
 
 
 def detectar_monedas_falsa(monedas, start_index, end_index):
-    if start_index >= end_index:
+    # Caso base: O(1)
+    if start_index == end_index:
         return monedas[start_index]
+    
+    if end_index - start_index == 1:
+        return monedas[start_index] if monedas[start_index] < monedas[end_index] else monedas[end_index]
 
+    # Caso recursivo: O(n)
     mid_index = start_index + (end_index - start_index) // 2
 
     mid = monedas[start_index:mid_index+1]
@@ -32,20 +37,16 @@ def detectar_monedas_falsa(monedas, start_index, end_index):
 
 def wrapper_detectar_moneda_falsa_dyc(monedas):
     """
-    A revisar...
-    
     Versión Division y Conquista:
 
     Complejidad temporal (teorema maestro):
-    T(n) = 2T(n/2) + O(1)
+    T(n) = 1 T(n/2) + O(n^1)
 
-    a = 2, b = 2, f(n) = 1
+    a = 1, b = 2, c = 1
 
-    log_b(a) = log_2(2) = 1
-
-    f(n) = O(n^0)
+    log_b(a) = log_1(2) = 0
     
-    T(n) = O(n^1 * log(n)) = O(n)
+    log_b(a) < c => O(n^c) = O(n^1)
 
     Complejidad temporal: O(n)
     """

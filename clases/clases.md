@@ -308,8 +308,8 @@ Complejidad temporal del algoritmo recursivo, mediante su ecuacion de recurrenci
 Donde:
 
 - A: Cantidad de llamadas recursivas
-- b: Proporcion de los subproblemas
-- C: Costo de combinar los sub-resultados
+- b: Proporcion en la que se dividen los subproblemas
+- c: Costo de combinar los sub-resultados
 
 Por lo que significa que la ecuacion de recurrencia va a ser: A x el tiempo que tarda en procesar los subproblemas + el tiempo que tarda en juntar los resultados.
 
@@ -319,9 +319,9 @@ El **Teorema Maestro** nos da, mediante una ecuacion de recurrencia, define la c
 
 El teorema maestro indica como cota superior:
 
-- Si `log_b A < C` => `T(n) = O(n^c)`
-- Si `log_b A = C` => `T(n) = O(n^c log_b n)`
-- Si `log_b A > C` => `T(n) = O(n^c log_b A)`
+- Si `log_b A < c` => `T(n) = O(n^c)`
+- Si `log_b A = c` => `T(n) = O(n^c log_b n)`
+- Si `log_b A > c` => `T(n) = O(n^c log_b A)`
 
 ### Algoritmo de Karatsuba
 
@@ -910,9 +910,9 @@ Ejemplo de Set Covering: Una estación de bomberos tiene la capacidad de cubrir 
 
 Planteamos un algoritmo greedy para resolverlo:
 
-- Seleccionar un conjunto Si siguiendo una regla sencilla
+- Seleccionar un conjunto S_i siguiendo una regla sencilla
 - Si quedan elementos por incluir:
-  - Remover Si de S
+  - Remover S_i de S
   - Continuar
 - Si no:
   - Terminar
