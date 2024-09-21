@@ -1,53 +1,60 @@
-from ejercicio_2 import posiciones_restaurante
+from time import time
+from tp1.ejercicio_2 import greedy
+import random
+
 
 MAPA_1 = [
-    [" ","X"," "," ","X"," "],
-    ["X"," "," "," "," "," "],
-    [" "," "," "," "," "," "],
-    ["X"," "," "," "," ","X"],
-    [" "," "," ","X"," "," "],
-    [" "," "," "," ","X"," "]
+    (1,1),
+    (3,2),
+    (3,3)
 ]
 
 MAPA_2 = [
-    [" "," "," "," "],
-    [" ","X"," "," "],
-    [" "," "," "," "],
-    [" "," ","X","X"],
+    (0,0),
+    (0,5),
+    (1,2),
+    (1,6),
+    (2,5),
+    (2,8),
+    (3,3),
+    (3,6),
+    (4,0),
+    (5,2),
+    (5,5),
+    (6,4),
+    (6,7),
+    (7,1),
+    (7,4),
+    (8,7)
 ]
 
-MAPA_3 = [
-    [" ","X"," "," "," "," "],
-    ["X"," "," "," ","X"," "],
-    [" "," "," "," "," "," "],
-    ["X"," "," ","X"," "," "],
-    [" ","X"," "," "," "," "],
-    [" "," "," "," "," ","X"]
-]
 
-# Poner los mapas ordenados por numero!
-# [MAPA_K, [(X1, EXPECTED_SIZE_1), (X2, EXPECTED_SIZE_2), ...]]
-TESTS = [
-    [MAPA_1, [(1, 4), (2, 2)]],
-    [MAPA_2, [(1, 1)]],
-    [MAPA_3, [(1, 4)]],
-]
+# Contraejemplo: para x=1, el optimo seria por ejemplo (2,2)
+# [(3, 2), (1, 1)]
+# print(greedy(MAPA_1, n=4))
 
-i = 0
+# [(5, 2), (1, 6), (6, 7), (0, 0)]
+# print(greedy(MAPA_2, n=9))
 
-for test_set in TESTS:
-    i += 1
-    name = f"MAPA_{i}"
-    mapa = test_set[0]
-    configs = test_set[1]
-    for config in configs:
-        X = config[0]
-        expected_size = config[1]
 
-        restaurantes = posiciones_restaurante(mapa, X)
-        try:
-            assert len(restaurantes) == expected_size
-            print(f"Test with X = {X} for map {name} passed successfully!")
-        except AssertionError:
-            print(f"---- Could not find the optimal case for X = {X} and map {name} ----")
-        
+NS = [16, 32, 64, 128, 256]
+
+for N in NS:
+    edificios = int(0.2 * N**2)
+    mapa = list(set([(random.randint(0, N-1), random.randint(0, N-1)) for _ in range(edificios)]))
+
+    # print(mapa)
+
+    start_time = time()
+    result = greedy(mapa, n=N)
+    end_time = time() - start_time
+
+    # print(len(result))
+    print(f"Elapsed: {end_time} seconds.")
+
+
+# Elapsed: 0.0010013580322265625 seconds.
+# Elapsed: 0.016596317291259766 seconds.
+# Elapsed: 0.2564847469329834 seconds.
+# Elapsed: 4.357736825942993 seconds.
+# Elapsed: 67.72359251976013 seconds.
