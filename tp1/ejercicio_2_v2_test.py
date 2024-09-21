@@ -34,24 +34,27 @@ MAPA_2 = [
 # print(greedy(MAPA_1, n=4))
 
 # [(5, 2), (1, 6), (6, 7), (0, 0)]
-print(greedy(MAPA_2, n=9))
+# print(greedy(MAPA_2, n=9))
 
 
-N = 40
-edificios = int(0.2 * N**2)
-mapa = list(set([(random.randint(0, N-1), random.randint(0, N-1)) for _ in range(edificios)]))
+NS = [16, 32, 64, 128, 256]
 
-# print(mapa)
+for N in NS:
+    edificios = int(0.2 * N**2)
+    mapa = list(set([(random.randint(0, N-1), random.randint(0, N-1)) for _ in range(edificios)]))
 
-start_time = time()
-result = greedy(mapa, n=N)
-end_time = time() - start_time
+    # print(mapa)
 
-print(len(result))
-print(f"Elapsed: {end_time} seconds.")
+    start_time = time()
+    result = greedy(mapa, n=N)
+    end_time = time() - start_time
+
+    # print(len(result))
+    print(f"Elapsed: {end_time} seconds.")
 
 
-# N = 10   ->  0.0
-# n = 20   ->  0.006158113479614258
-# n = 40   ->  0.2549169063568115
-# n = 80   -> 14.387941598892212
+# Elapsed: 0.0010013580322265625 seconds.
+# Elapsed: 0.016596317291259766 seconds.
+# Elapsed: 0.2564847469329834 seconds.
+# Elapsed: 4.357736825942993 seconds.
+# Elapsed: 67.72359251976013 seconds.
