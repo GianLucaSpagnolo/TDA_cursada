@@ -1,5 +1,5 @@
 from time import time
-from ejercicio_2 import posiciones_restaurante
+from ejercicio_2_v2 import greedy
 import random
 
 
@@ -31,20 +31,20 @@ MAPA_2 = [
 
 # Contraejemplo: para x=1, el optimo seria por ejemplo (2,2)
 # [(3, 2), (1, 1)]
-# print(posiciones_restaurante(MAPA_1, n=4, x=1))
+# print(greedy(MAPA_1, n=4))
 
 # [(5, 2), (1, 6), (6, 7), (0, 0)]
-# print(posiciones_restaurante(MAPA_2, n=9, x=2))
+print(greedy(MAPA_2, n=9))
 
 
-N = 160
+N = 40
 edificios = int(0.2 * N**2)
 mapa = list(set([(random.randint(0, N-1), random.randint(0, N-1)) for _ in range(edificios)]))
 
 # print(mapa)
 
 start_time = time()
-result = posiciones_restaurante(mapa, n=N)
+result = greedy(mapa, n=N)
 end_time = time() - start_time
 
 print(len(result))

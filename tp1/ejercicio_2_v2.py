@@ -1,11 +1,3 @@
-import math
-
-
-def marcar_edificios_visitados(edificios_visitados, edificios_cubiertos):
-    for e in edificios_cubiertos:
-        edificios_visitados.append(e)
-
-
 def dentro_rango(otro_edificio, edificio_central, radio, n):
     cx, cy = edificio_central
 
@@ -21,22 +13,23 @@ def dentro_rango(otro_edificio, edificio_central, radio, n):
 
 
 def calcular_cobertura(edificios, edificios_visitados, edificio, radio, n) -> list[int, list[list[int, int]]]:
-    cobertura = []
+    cobertura = set()
 
     for e in edificios:
         if e in edificios_visitados:
             continue
         if dentro_rango(e, edificio, radio, n):
-            cobertura.append(e)
+            cobertura.add(e)
 
     return len(cobertura), cobertura
 
 
 def greedy(edificios, n):
-    edificios_visitados = []
-    restaurantes = []
+    
+    edificios_visitados = set()
+    restaurantes = set()
 
-    x = math.ceil(0.2 * n)
+    x = round(0.2 * n)
 
     while len(edificios_visitados) < len(edificios):
         max_cobertura = -1
@@ -54,8 +47,8 @@ def greedy(edificios, n):
                 edificios_cubiertos = edificios_dentro_de_cobertura
                 edificio_max_cobertura = edificio
 
-        marcar_edificios_visitados(edificios_visitados, edificios_cubiertos)
-        restaurantes.append(edificio_max_cobertura)
+        edificios_visitados.update(edificios_cubiertos)
+        restaurantes.add(edificio_max_cobertura)
 
     return restaurantes
 
