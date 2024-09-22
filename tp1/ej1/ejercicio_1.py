@@ -42,13 +42,13 @@ def wrapper_detectar_moneda_falsa_dyc(monedas):
     Complejidad temporal (teorema maestro):
     T(n) = 2 T(n/2) + O(n^1)
 
-    a = 1, b = 2, c = 1
+    a = 2, b = 2, c = 1
 
-    log_b(a) = log_2(1) = 0
+    log_b(a) = log_2(2) = 1
     
-    log_b(a) < c => O(n^c) = O(n^1)
+    log_b(a) = c => O(n^c log_b(n)) = O(n^1 log_2(n))
 
-    Complejidad temporal O(n)
+    Complejidad temporal O(n log n)
     """
     return detectar_monedas_falsa_dyc(monedas, 0, len(monedas) - 1)
 
@@ -75,12 +75,12 @@ def wrapper_detectar_moneda_falsa_pond(monedas):
     Complejidad temporal (teorema maestro):
     T(n) = 2 T(n/2) + O(n^1)
 
-    a = 2, b = 2, c = 1
+    a = 1, b = 2, c = 1
 
-    log_b(a) = log_2(2) = 1
+    log_b(a) = log_2(1) = 0
     
-    log_b(a) = c => O(n^c log_b(n)) = O(n^1 log_2(n))
+    log_b(a) < c => O(n^c) = O(n^1)
 
-    Complejidad temporal O(n log n)
+    Complejidad temporal O(n)
     """
     return detectar_monedas_falsa_pond(monedas, 0, len(monedas) - 1)
