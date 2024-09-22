@@ -10,10 +10,12 @@ def compatible(magickConstant, square, row, col, value):
         return False
     # SI LA SUMA DE LA COLUMNA HASTA AHORA ES MAYOR A LA CONSTANTE MAGICA SE PODA
     totalColumna = 0
-    #for i in range(len(square) - 1):
-    #    totalColumna += square[i][col]
-    #if totalColumna + value > magickConstant:
-    #    return False
+    if len(square) > 0:
+        for i in range(len(square)):
+            if len(square[i]) > col:
+                totalColumna += square[i][col]
+        if totalColumna + value > magickConstant:
+            return False
     return True
 
 
@@ -27,22 +29,29 @@ def fill(square, sideSize, magickConstant, possibleValues, row, col):
             possibleValuesOfNext = possibleValues.copy()
             square[row].append(value)
             possibleValuesOfNext.remove(value)
-            printSquare(square, sideSize)
+
+            nextRow = 0
+            nextCol = 0
+
             if len(square[row]) == sideSize:
-                row += 1
-                col = 0
+                nextRow = row + 1
+                nextCol = 0
             else:
-                col += 1
+                nextRow = row
+                nextCol += col + 1
 
             if len(possibleValuesOfNext) == 0:
                 return True
-            result = fill(square, sideSize, magickConstant, possibleValuesOfNext, row, col)
+            result = fill(square, sideSize, magickConstant, possibleValuesOfNext, nextRow, nextCol)
             if result:
                 return True
             else:
                 if len(square[row]) > 0:
                     square[row].pop()
-                possibleValuesOfNext.insert(0, value)
+                else:
+                    square.pop()
+                if len(possibleValuesOfNext) == 0:
+                    return False
     return False
 
 
@@ -53,3 +62,4 @@ def buildMagicSquare(n):
     magickConstant = n * (n**2 + 1) / 2
     sideSize = n
     fill(square, sideSize, magickConstant, possibleValues, 0, 0)
+    printSquare(square, sideSize)
