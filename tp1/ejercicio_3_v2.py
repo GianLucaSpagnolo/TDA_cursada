@@ -4,7 +4,7 @@ def printSquare(square, sideSize):
         print(row)
 
 
-def compatible(magickConstant, square, row, col, value):
+def compatible(magickConstant, sideSize, square, row, col, value):
     # SI LA SUMA DE LA FILA ES MAYOR A LA CONSTANTE MAGICA SE PODA
     if sum(square[row]) + value > magickConstant:
         return False
@@ -16,15 +16,27 @@ def compatible(magickConstant, square, row, col, value):
                 totalColumna += square[i][col]
         if totalColumna + value > magickConstant:
             return False
-    # La suma de la diagonal principal es mayor a la constante magica
     if row == col and len(square) > 0 and len(square[row]) > 0:
-        totalDiagonalPrincipal = 0
+        # La suma de la diagonal principal es mayor a la constante magica
+        mainDiagonalTotal = 0
         for i in range(len(square)):
             if(i == len(square[i])):
                 break
-            totalDiagonalPrincipal += square[i][i]
-        if totalDiagonalPrincipal + value > magickConstant:
+            mainDiagonalTotal += square[i][i]
+        if mainDiagonalTotal + value > magickConstant:
             return False
+    printSquare(square, 3)
+    # si row + col == n - 1 entonces estamos en la diagonal secundaria
+    if row + col == (sideSize - 1):
+        secondaryDiagonal = 0
+        for i in range(sideSize):
+            # si estamos en la posicion actual corta las sumas
+            if i == row and col == sideSize - i - 1:
+                break
+            secondaryDiagonal += square[i][sideSize - i - 1]
+        if secondaryDiagonal + value > magickConstant:
+            return False
+        # La suma de la diagonal secundaria es mayor a la constante magica
     return True
 
 
@@ -33,7 +45,7 @@ def fill(square, sideSize, magickConstant, possibleValues, row, col):
     for value in possibleValues:
         if len(square) == row:
             square.append([])
-        if compatible(magickConstant, square, row, col, value):
+        if compatible(magickConstant, sideSize, square, row, col, value):
             # SE CREA COPIA DE LISTA DE VALORES POSIBLES PARA NO MODIFICAR EL ORIGINAL
             # YA QUE SE ESTA ITERANDO Y PUEDE CREAR INCONSISTENCIAS
             possibleValuesOfNext = possibleValues.copy()
