@@ -16,7 +16,17 @@ def compatible(magickConstant, square, row, col, value):
                 totalColumna += square[i][col]
         if totalColumna + value > magickConstant:
             return False
+    # La suma de la diagonal principal es mayor a la constante magica
+    if row == col and len(square) > 0 and len(square[row]) > 0:
+        totalDiagonalPrincipal = 0
+        for i in range(len(square)):
+            if(i == len(square[i])):
+                break
+            totalDiagonalPrincipal += square[i][i]
+        if totalDiagonalPrincipal + value > magickConstant:
+            return False
     return True
+
 
 
 def fill(square, sideSize, magickConstant, possibleValues, row, col):
