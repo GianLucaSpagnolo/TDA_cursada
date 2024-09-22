@@ -5,27 +5,34 @@ def printSquare(square, sideSize):
 
 
 def compatible(magickConstant, sideSize, square, row, col, value):
-    # SI LA SUMA DE LA FILA ES MAYOR A LA CONSTANTE MAGICA SE PODA
-    if sum(square[row]) + value > magickConstant:
+    # Si la suma de la fila es mayor a la constante magica se poda
+    rowTotal = sum(square[row]) + value
+    if rowTotal > magickConstant:
         return False
-    # SI LA SUMA DE LA COLUMNA HASTA AHORA ES MAYOR A LA CONSTANTE MAGICA SE PODA
+
+
+    # Si la suma de la columna hasta ahora es mayor
+    # a la constante magica se poda
     totalColumna = 0
     if len(square) > 0:
         for i in range(len(square)):
             if len(square[i]) > col:
                 totalColumna += square[i][col]
+        # La suma de la columna es mayor a la constante magica
         if totalColumna + value > magickConstant:
             return False
+
+    # La suma de la diagonal principal es mayor a la constante magica
     if row == col and len(square) > 0 and len(square[row]) > 0:
-        # La suma de la diagonal principal es mayor a la constante magica
         mainDiagonalTotal = 0
         for i in range(len(square)):
-            if(i == len(square[i])):
+            if i == len(square[i]):
                 break
             mainDiagonalTotal += square[i][i]
+        # La suma de la diagonal principal es mayor a la constante magica
         if mainDiagonalTotal + value > magickConstant:
             return False
-    printSquare(square, 3)
+
     # si row + col == n - 1 entonces estamos en la diagonal secundaria
     if row + col == (sideSize - 1):
         secondaryDiagonal = 0
@@ -34,12 +41,13 @@ def compatible(magickConstant, sideSize, square, row, col, value):
             if i == row and col == sideSize - i - 1:
                 break
             secondaryDiagonal += square[i][sideSize - i - 1]
+        # La suma de la diagonal secundaria es mayor a la constante magica
         if secondaryDiagonal + value > magickConstant:
             return False
-        # La suma de la diagonal secundaria es mayor a la constante magica
+        # Termino pero la suma es menor a la constante magica
+        if secondaryDiagonal + value < magickConstant and row == sideSize - 1 and col == 0:
+            return False
     return True
-
-
 
 def fill(square, sideSize, magickConstant, possibleValues, row, col):
     for value in possibleValues:
