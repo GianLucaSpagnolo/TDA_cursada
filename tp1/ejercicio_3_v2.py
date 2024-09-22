@@ -1,13 +1,20 @@
+import os
+
 def printSquare(square, sideSize):
+    os.system('clear')
     print("---" * sideSize)
     for row in square:
         print(row)
+    print("---" * sideSize)
 
 
 def compatible(magickConstant, sideSize, square, row, col, value):
     # Si la suma de la fila es mayor a la constante magica se poda
     rowTotal = sum(square[row]) + value
     if rowTotal > magickConstant:
+        return False
+    # La suma de la fila es menor a la constante magica
+    if rowTotal < magickConstant and col == sideSize - 1:
         return False
 
 
@@ -21,6 +28,10 @@ def compatible(magickConstant, sideSize, square, row, col, value):
         # La suma de la columna es mayor a la constante magica
         if totalColumna + value > magickConstant:
             return False
+        # La suma de la columna es menor a la constante magica
+        if totalColumna + value < magickConstant and row == sideSize - 1:
+            return False
+
 
     # La suma de la diagonal principal es mayor a la constante magica
     if row == col and len(square) > 0 and len(square[row]) > 0:
@@ -31,6 +42,9 @@ def compatible(magickConstant, sideSize, square, row, col, value):
             mainDiagonalTotal += square[i][i]
         # La suma de la diagonal principal es mayor a la constante magica
         if mainDiagonalTotal + value > magickConstant:
+            return False
+        # La suma de la diagonal principal es menor a la constante magica
+        if mainDiagonalTotal + value < magickConstant and row == sideSize - 1 and col == sideSize - 1:
             return False
 
     # si row + col == n - 1 entonces estamos en la diagonal secundaria
@@ -62,6 +76,8 @@ def fill(square, sideSize, magickConstant, possibleValues, row, col):
 
             nextRow = 0
             nextCol = 0
+
+            printSquare(square, sideSize)
 
             if len(square[row]) == sideSize:
                 nextRow = row + 1
