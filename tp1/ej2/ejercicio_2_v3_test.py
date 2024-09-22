@@ -19,8 +19,8 @@ def generar_edificios_en_grilla(n):
 
 for n in N:
     edificios = generar_edificios_en_grilla(n)
-    for i in range(n):
-        print(" ".join(["E" if (i, j) in edificios else "." for j in range(n)]))
+    #for i in range(n):
+    #    print(" ".join(["E" if (i, j) in edificios else "." for j in range(n)]))
 
     start_time = time()
     restaurantes = ej2.greedy(edificios, n)

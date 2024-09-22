@@ -1,7 +1,7 @@
 from time import time
 import random
 from ejercicio_2_v2 import greedy2
-from ejercicio_2 import greedy
+from ejercicio_2_v1 import greedy
 
 
 MAPA_1 = [
@@ -40,15 +40,13 @@ MAPA_2 = [
 
 
 # NS = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
-NS = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+# NS = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+NS = [10, 20, 50, 100, 200]
 
 for N in NS:
-    # edificios = int(0.2 * N**2)
-    edificios = 1 if (N < 5) else N
+    edificios = int(0.2 * N**2)
 
     mapa = list(set([(random.randint(0, N-1), random.randint(0, N-1)) for _ in range(edificios)]))
-
-    # print(mapa)
 
     start_time1 = time()
     result1 = sorted(list(greedy(mapa, n=N)))
@@ -58,9 +56,7 @@ for N in NS:
     result2 = sorted(list(greedy2(mapa, n=N)))
     end_time2 = time() - start_time2
 
-    print(len(result1))
-    print(f"Greedy 1 con N = {N} --> Elapsed: {end_time1} seconds.")
-    print(len(result2))
-    print(f"Greedy 2 con N = {N} --> Elapsed: {end_time2} seconds.")
-
-    print()
+    print(f"Greedy version 1 con N = {N} --> Elapsed: {end_time1} seconds.")
+    print(f"Cantidad de restaurantes: {len(result1)}")
+    print(f"Greedy version 2 con N = {N} --> Elapsed: {end_time2} seconds.")
+    print(f"Cantidad de restaurantes: {len(result2)}\n")
