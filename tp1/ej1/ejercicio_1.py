@@ -16,6 +16,7 @@ def wrapper_detectar_moneda_falsa_lineal(bolsa_de_monedas):
     return detectar_moneda_falsa_lineal(bolsa_de_monedas, 0, len(bolsa_de_monedas)-1)
 
 
+
 def detectar_monedas_falsa_dyc(monedas, start_index, end_index):
     # Caso base: O(1)
     if end_index - start_index <= 1:
@@ -50,3 +51,36 @@ def wrapper_detectar_moneda_falsa_dyc(monedas):
     Complejidad temporal O(n log n)
     """
     return detectar_monedas_falsa_dyc(monedas, 0, len(monedas) - 1)
+
+
+
+def detectar_monedas_falsa_pond(monedas, start_index, end_index):
+    if start_index >= end_index:
+        return monedas[start_index]
+    
+    mid_index = start_index + (end_index - start_index) // 2
+
+    mid = monedas[start_index:mid_index+1]
+    expected_weight = len(mid) * max(monedas[0], monedas[1])
+
+    if sum(mid) < expected_weight:
+        return detectar_monedas_falsa_pond(monedas, start_index, mid_index)
+    else:
+        return detectar_monedas_falsa_pond(monedas, mid_index + 1, end_index)
+
+def wrapper_detectar_moneda_falsa_pond(monedas):
+    """
+    Versión Division y Conquista (ponderado):
+
+    Complejidad temporal (teorema maestro):
+    T(n) = 2 T(n/2) + O(n^1)
+
+    a = 1, b = 2, c = 1
+
+    log_b(a) = log_2(1) = 0
+    
+    log_b(a) < c => O(n^c) = O(n^1)
+
+    Complejidad temporal O(n)
+    """
+    return detectar_monedas_falsa_pond(monedas, 0, len(monedas) - 1)
