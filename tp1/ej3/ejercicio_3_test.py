@@ -1,5 +1,7 @@
-from tp1.ej3.ejercicio_3_v2 import buildMagicSquare
+from ejercicio_3 import buildMagicSquare
+
 
 N = 3
+
 
 buildMagicSquare(N)
