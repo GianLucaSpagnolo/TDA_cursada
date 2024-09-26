@@ -16,7 +16,7 @@ def calcular_cobertura(edificio_central: tuple, edificios: list, radio_de_cobert
     return cobertura
 
 
-def construir_diccionario_edificios(edificios: list, tamano_barrio: int) -> dict:
+def crear_diccionario_edificios(edificios: list, tamano_barrio: int) -> dict:
 
     diccionario_edificios: dict = dict()
     radio_de_cobertura: int = round(0.20 * tamano_barrio)
@@ -29,7 +29,7 @@ def construir_diccionario_edificios(edificios: list, tamano_barrio: int) -> dict
     return diccionario_edificios
 
 
-def eliminar_edificios_cubiertos(diccionario_edificios: dict, edificios_ya_cubiertos: set) -> dict:
+def eliminar_edificios_cubiertos(diccionario_edificios: dict, edificios_ya_cubiertos: set) -> None:
 
     for edificio_ya_visitado in edificios_ya_cubiertos:
         del diccionario_edificios[edificio_ya_visitado]
@@ -41,7 +41,7 @@ def eliminar_edificios_cubiertos(diccionario_edificios: dict, edificios_ya_cubie
 def construccion_de_restaurantes(edificios: list, tamano_barrio: int) -> list:
 
     restaurantes: list = list()
-    diccionario_edificios: dict = construir_diccionario_edificios(edificios, tamano_barrio)
+    diccionario_edificios: dict = crear_diccionario_edificios(edificios, tamano_barrio)
 
     while diccionario_edificios:
         max_cobertura: int = 0
