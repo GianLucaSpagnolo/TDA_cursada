@@ -6,6 +6,10 @@ import ejercicio_1 as ej1
 CANTIDADES_DE_MONEDAS = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
 MONEDA_FALSA = 9
 
+# Semilla para generar las monedas
+# Cambiar la semilla para obtener diferentes bolsas de monedas
+SEMILLA = 5000
+
 def test_moneda_falsa_random(cantidad):
     bolsa_de_monedas = [10]*(cantidad - 1)
     random_pos = randint(0, cantidad - 1)
@@ -21,7 +25,7 @@ def test_moneda_falsa_random(cantidad):
 
 
 def main():
-    seed(5000)
+    seed(SEMILLA)
     # Testeo de casos de prueba
     for cantidad in CANTIDADES_DE_MONEDAS:
         test_moneda_falsa_random(cantidad)
