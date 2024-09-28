@@ -1,3 +1,5 @@
+RADIO_DE_COBERTURA: int = 0.20
+
 def calcular_cobertura(edificio_central: tuple, edificios: list, radio_de_cobertura: int, tamano_barrio: int) -> set:
 
     cobertura: set = set()
@@ -19,7 +21,7 @@ def calcular_cobertura(edificio_central: tuple, edificios: list, radio_de_cobert
 def crear_diccionario_edificios(edificios: list, tamano_barrio: int) -> dict:
 
     diccionario_edificios: dict = dict()
-    radio_de_cobertura: int = round(0.20 * tamano_barrio)
+    radio_de_cobertura: int = round(RADIO_DE_COBERTURA * tamano_barrio)
     edificios.sort()
 
     for edificio in edificios:
