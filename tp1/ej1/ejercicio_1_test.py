@@ -21,7 +21,7 @@ def test_moneda_falsa_random(cantidad):
     moneda_pond = ej1.wrapper_detectar_moneda_falsa_pond(bolsa_de_monedas)
     time_pond = process_time() - time_pond
 
-    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA
+    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA and moneda_pond == MONEDA_FALSA
     print(f"{cantidad} monedas (random: posicion {random_pos})")
     print(f"Moneda falsa    (lineal): {moneda_lineal} - Tiempo: {time_lineal:.8f}")
     print(f"Moneda falsa       (dyc): {moneda_dyc} - Tiempo: {time_dyc:.8f}")
@@ -40,7 +40,7 @@ def test_modena_falsa_inicio(cantidad):
     moneda_pond = ej1.wrapper_detectar_moneda_falsa_pond(bolsa_de_monedas)
     time_pond = process_time() - time_pond
 
-    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA
+    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA and moneda_pond == MONEDA_FALSA
     print(f"{cantidad} monedas (caso inicio)")
     print(f"Moneda falsa    (lineal): {moneda_lineal} - Tiempo: {time_lineal:.8f}")
     print(f"Moneda falsa       (dyc): {moneda_dyc} - Tiempo: {time_dyc:.8f}")
@@ -59,7 +59,7 @@ def test_moneda_falsa_mitad(cantidad):
     moneda_pond = ej1.wrapper_detectar_moneda_falsa_pond(bolsa_de_monedas)
     time_pond = process_time() - time_pond
 
-    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA
+    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA and moneda_pond == MONEDA_FALSA
     print(f"{cantidad} monedas (caso mitad)")
     print(f"Moneda falsa    (lineal): {moneda_lineal} - Tiempo: {time_lineal:.8f}")
     print(f"Moneda falsa       (dyc): {moneda_dyc} - Tiempo: {time_dyc:.8f}")
@@ -78,7 +78,7 @@ def test_modena_falsa_final(cantidad):
     moneda_pond = ej1.wrapper_detectar_moneda_falsa_pond(bolsa_de_monedas)
     time_pond = process_time() - time_pond
 
-    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA
+    assert moneda_lineal == MONEDA_FALSA and moneda_dyc == MONEDA_FALSA and moneda_pond == MONEDA_FALSA
     print(f"{cantidad} monedas (caso final)")
     print(f"Moneda falsa    (lineal): {moneda_lineal} - Tiempo: {time_lineal:.8f}")
     print(f"Moneda falsa       (dyc): {moneda_dyc} - Tiempo: {time_dyc:.8f}")
