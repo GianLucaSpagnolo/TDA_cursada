@@ -8,7 +8,7 @@ CANTIDAD_EDIFICIOS: float = 0.2
 
 # Semilla para generar los edificios
 # Cambiar la semilla para obtener diferentes grillas de edificios
-SEMILLA = 5000
+SEMILLA: int = 5000
 
 
 def print_edificios_en_grilla(edificios: list, tamano_barrio: int) -> None:
@@ -45,9 +45,9 @@ def test_ej2() -> None:
         edificios: list = generar_edificios_en_grilla(tamano_barrio)
         print_edificios_en_grilla(edificios, tamano_barrio)
 
-        start_time = process_time()
+        start_time: float = process_time()
         restaurantes = ej2.construccion_de_restaurantes(edificios, tamano_barrio)
-        end_time = process_time() - start_time
+        end_time: float = process_time() - start_time
 
         print(f"\nTiempo de ejecución para n = {tamano_barrio}: {end_time:.8f} segundos")
         print(f"Cantidad de restaurantes: {len(restaurantes)} con cobertura {round(ej2.RADIO_DE_COBERTURA * tamano_barrio)}")

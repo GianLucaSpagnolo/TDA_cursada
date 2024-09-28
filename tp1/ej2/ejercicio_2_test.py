@@ -3,7 +3,7 @@ from random import randint
 import ejercicio_2 as ej2
 
 
-TAMANOS_BARRIO: list = [10, 20, 50, 100, 200] # con 400 ya empieza a haber problemas en cuanto a tiempo... Pueden verificarlo
+TAMANOS_BARRIO: list = [10, 20, 40, 100, 200] # con 400 ya empieza a haber problemas en cuanto a tiempo de ejecución
 CANTIDAD_EDIFICIOS: float = 0.2
 
 
@@ -26,14 +26,15 @@ def test_ej2() -> None:
 
     for tamano_barrio in TAMANOS_BARRIO:
 
+        radio_de_cobertura: int = ej2.calcular_radio_de_cobertura(tamano_barrio)
         edificios: list = generar_edificios_en_grilla(tamano_barrio)
 
-        start_time = process_time()
+        start_time: float = process_time()
         restaurantes: list = ej2.construccion_de_restaurantes(edificios, tamano_barrio)
-        end_time = process_time() - start_time
+        end_time: float = process_time() - start_time
 
         print(f"\033[31;1;4mTiempo de ejecución para n = {tamano_barrio}:\033[0m {end_time:.8f} segundos")
-        print(f"Cantidad de restaurantes: {len(restaurantes)} con cobertura {round(ej2.RADIO_DE_COBERTURA * tamano_barrio)}\nRestaurantes: {restaurantes}\n")
+        print(f"Cantidad de restaurantes: {len(restaurantes)} con cobertura {radio_de_cobertura}\nRestaurantes: {restaurantes}\n")
 
 
 test_ej2()
