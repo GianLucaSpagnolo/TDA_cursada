@@ -71,16 +71,5 @@ def detectar_monedas_falsa_pond(monedas, start_index, end_index):
 def wrapper_detectar_moneda_falsa_pond(monedas):
     """
     Versión Division y Conquista (ponderado):
-
-    Complejidad temporal (teorema maestro):
-    T(n) = 2 T(n/2) + O(n^1)
-
-    a = 1, b = 2, c = 1
-
-    log_b(a) = log_2(1) = 0
-    
-    log_b(a) < c => O(n^c) = O(n^1)
-
-    Complejidad temporal O(n)
     """
     return detectar_monedas_falsa_pond(monedas, 0, len(monedas) - 1)
