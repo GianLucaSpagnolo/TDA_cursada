@@ -33,7 +33,7 @@ class CachedRowColumnDiagonalCalculations:
         self.columnTotals = {}
         self.mainDiagonalTotal = 0
         self.secondaryDiagonalTotal = 0
-        self.magickConstant = sideSize * (sideSize ** 2 + 1) / 2
+        self.magicConstant = sideSize * (sideSize ** 2 + 1) / 2
         self.sideSize = sideSize
         for i in range(sideSize):
             self.rowTotals[i] = 0
@@ -69,39 +69,39 @@ class CachedRowColumnDiagonalCalculations:
 
 
 def compatible(cachedRowColumnDiagonalCalculations, row, col, value):
-    magickConstant = cachedRowColumnDiagonalCalculations.magickConstant
+    magicConstant = cachedRowColumnDiagonalCalculations.magicConstant
     # COMPARA LAS SUMAS DE FILA, COLUMNA Y DIAGONALES
     rowTotal = cachedRowColumnDiagonalCalculations.getRowTotal(row) + value
     # SI LA SUMA DE LA FILA ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
-    if rowTotal > magickConstant:
+    if rowTotal > magicConstant:
         return False
     # SI LA SUMA DE LA COLUMNA ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
     columnTotal = cachedRowColumnDiagonalCalculations.getColumnTotal(col) + value
-    if columnTotal > magickConstant:
+    if columnTotal > magicConstant:
         return False
     # SI LA SUMA DE LA DIAGONAL PRINCIPAL ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
     mainDiagonalTotal = cachedRowColumnDiagonalCalculations.getMainDiagonalTotal() + value
-    if row == col and mainDiagonalTotal > magickConstant:
+    if row == col and mainDiagonalTotal > magicConstant:
         return False
     # SI LA SUMA DE LA DIAGONAL SECUNDARIA ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
     secondaryDiagonalTotal = cachedRowColumnDiagonalCalculations.getSecondaryDiagonalTotal() + value
-    if row + col == cachedRowColumnDiagonalCalculations.sideSize - 1 and secondaryDiagonalTotal > magickConstant:
+    if row + col == cachedRowColumnDiagonalCalculations.sideSize - 1 and secondaryDiagonalTotal > magicConstant:
         return False
     # VALIDA QUE SI ES LA ULTIMA CELDA DE FILA DE LA CONSTANTE MÁGICA
     isLastCellInRow = col == cachedRowColumnDiagonalCalculations.sideSize - 1
-    if isLastCellInRow and rowTotal != magickConstant:
+    if isLastCellInRow and rowTotal != magicConstant:
         return False
     # VALIDA QUE SI ES LA ULTIMA CELDA DE COLUMNA DE LA CONSTANTE MÁGICA
     isLastCellInColumn = row == cachedRowColumnDiagonalCalculations.sideSize - 1
-    if isLastCellInColumn and columnTotal != magickConstant:
+    if isLastCellInColumn and columnTotal != magicConstant:
         return False
     # VALIDA QUE SI ES LA ULTIMA CELDA DE LA DIAGONAL SECUNDARIA DE LA CONSTANTE MÁGICA
     isLastCellInSecondaryDiagonal = col == 0 and row == cachedRowColumnDiagonalCalculations.sideSize - 1
-    if isLastCellInSecondaryDiagonal and secondaryDiagonalTotal != magickConstant:
+    if isLastCellInSecondaryDiagonal and secondaryDiagonalTotal != magicConstant:
         return False
     # VALIDA QUE SI ES LA ULTIMA CELDA DE LA DIAGONAL PRINCIPAL DE LA CONSTANTE MÁGICA
     isLastCellInMainDiagonal = row == col and row == cachedRowColumnDiagonalCalculations.sideSize - 1
-    if isLastCellInMainDiagonal and mainDiagonalTotal != magickConstant:
+    if isLastCellInMainDiagonal and mainDiagonalTotal != magicConstant:
         return False
     return True
 
