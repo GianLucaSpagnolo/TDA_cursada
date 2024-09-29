@@ -1,113 +1,174 @@
-import os
 
 
-def printSquare(square, sideSize):
-    os.system('clear')
-    print("---" * sideSize)
-    for row in square:
-        print(row)
-    print("---" * sideSize)
+class PossibleValues:
+    availables = 0
+    values = []
+
+    def __init__(self, valueArray):
+        self.values = list(valueArray)
+        self.availables = len(self.values)
+
+    def markUsed(self, value):
+        self.availables -= 1
+        value.used = True
+
+    def markUnused(self, value):
+        self.availables += 1
+        value.used = False
+
+    def getAvailablesCount(self):
+        return self.availables
+
+    def getValues(self):
+        return self.values
 
 
-def compatible(magickConstant, sideSize, square, row, col, value):
-    # Si la suma de la fila es mayor a la constante magica se poda
-    rowTotal = sum(square[row]) + value
+class PossibleValue:
+    def __init__(self, value):
+        self.value = value
+        self.used = False
+
+
+class CachedRowColumnDiagonalCalculations:
+    def __init__(self, sideSize):
+        self.rowTotals = {}
+        self.columnTotals = {}
+        self.mainDiagonalTotal = 0
+        self.secondaryDiagonalTotal = 0
+        self.magickConstant = sideSize * (sideSize ** 2 + 1) / 2
+        self.sideSize = sideSize
+        for i in range(sideSize):
+            self.rowTotals[i] = 0
+            self.columnTotals[i] = 0
+
+    def addItem(self, row, col, value):
+        self.rowTotals[row] += value
+        self.columnTotals[col] += value
+        if row == col:
+            self.mainDiagonalTotal += value
+        if row + col == self.sideSize - 1:
+            self.secondaryDiagonalTotal += value
+
+    def removeItem(self, row, col, value):
+        self.rowTotals[row] -= value
+        self.columnTotals[col] -= value
+        if row == col:
+            self.mainDiagonalTotal -= value
+        if row + col == self.sideSize - 1:
+            self.secondaryDiagonalTotal -= value
+
+    def getRowTotal(self, row):
+        return self.rowTotals[row]
+
+    def getColumnTotal(self, col):
+        return self.columnTotals[col]
+
+    def getMainDiagonalTotal(self):
+        return self.mainDiagonalTotal
+
+    def getSecondaryDiagonalTotal(self):
+        return self.secondaryDiagonalTotal
+
+
+def compatible(cachedRowColumnDiagonalCalculations, row, col, value):
+    magickConstant = cachedRowColumnDiagonalCalculations.magickConstant
+    # COMPARA LAS SUMAS DE FILA, COLUMNA Y DIAGONALES
+    rowTotal = cachedRowColumnDiagonalCalculations.getRowTotal(row) + value
+    # SI LA SUMA DE LA FILA ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
     if rowTotal > magickConstant:
         return False
-    # La suma de la fila es menor a la constante magica
-    if rowTotal < magickConstant and col == sideSize - 1:
+    # SI LA SUMA DE LA COLUMNA ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
+    columnTotal = cachedRowColumnDiagonalCalculations.getColumnTotal(col) + value
+    if columnTotal > magickConstant:
         return False
-
-
-    # Si la suma de la columna hasta ahora es mayor
-    # a la constante magica se poda
-    totalColumna = 0
-    if len(square) > 0:
-        for i in range(len(square)):
-            if len(square[i]) > col:
-                totalColumna += square[i][col]
-        # La suma de la columna es mayor a la constante magica
-        if totalColumna + value > magickConstant:
-            return False
-        # La suma de la columna es menor a la constante magica
-        if totalColumna + value < magickConstant and row == sideSize - 1:
-            return False
-
-
-    # La suma de la diagonal principal es mayor a la constante magica
-    if row == col and len(square) > 0 and len(square[row]) > 0:
-        mainDiagonalTotal = 0
-        for i in range(len(square)):
-            if i == len(square[i]):
-                break
-            mainDiagonalTotal += square[i][i]
-        # La suma de la diagonal principal es mayor a la constante magica
-        if mainDiagonalTotal + value > magickConstant:
-            return False
-        # La suma de la diagonal principal es menor a la constante magica
-        if mainDiagonalTotal + value < magickConstant and row == sideSize - 1 and col == sideSize - 1:
-            return False
-
-    # si row + col == n - 1 entonces estamos en la diagonal secundaria
-    if row + col == (sideSize - 1):
-        secondaryDiagonal = 0
-        for i in range(sideSize):
-            # si estamos en la posicion actual corta las sumas
-            if i == row and col == sideSize - i - 1:
-                break
-            secondaryDiagonal += square[i][sideSize - i - 1]
-        # La suma de la diagonal secundaria es mayor a la constante magica
-        if secondaryDiagonal + value > magickConstant:
-            return False
-        # Termino pero la suma es menor a la constante magica
-        if secondaryDiagonal + value < magickConstant and row == sideSize - 1 and col == 0:
-            return False
+    # SI LA SUMA DE LA DIAGONAL PRINCIPAL ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
+    mainDiagonalTotal = cachedRowColumnDiagonalCalculations.getMainDiagonalTotal() + value
+    if row == col and mainDiagonalTotal > magickConstant:
+        return False
+    # SI LA SUMA DE LA DIAGONAL SECUNDARIA ES MAYOR A LA CONSTANTE MÁGICA, NO ES COMPATIBLE
+    secondaryDiagonalTotal = cachedRowColumnDiagonalCalculations.getSecondaryDiagonalTotal() + value
+    if row + col == cachedRowColumnDiagonalCalculations.sideSize - 1 and secondaryDiagonalTotal > magickConstant:
+        return False
+    # VALIDA QUE SI ES LA ULTIMA CELDA DE FILA DE LA CONSTANTE MÁGICA
+    isLastCellInRow = col == cachedRowColumnDiagonalCalculations.sideSize - 1
+    if isLastCellInRow and rowTotal != magickConstant:
+        return False
+    # VALIDA QUE SI ES LA ULTIMA CELDA DE COLUMNA DE LA CONSTANTE MÁGICA
+    isLastCellInColumn = row == cachedRowColumnDiagonalCalculations.sideSize - 1
+    if isLastCellInColumn and columnTotal != magickConstant:
+        return False
+    # VALIDA QUE SI ES LA ULTIMA CELDA DE LA DIAGONAL SECUNDARIA DE LA CONSTANTE MÁGICA
+    isLastCellInSecondaryDiagonal = col == 0 and row == cachedRowColumnDiagonalCalculations.sideSize - 1
+    if isLastCellInSecondaryDiagonal and secondaryDiagonalTotal != magickConstant:
+        return False
+    # VALIDA QUE SI ES LA ULTIMA CELDA DE LA DIAGONAL PRINCIPAL DE LA CONSTANTE MÁGICA
+    isLastCellInMainDiagonal = row == col and row == cachedRowColumnDiagonalCalculations.sideSize - 1
+    if isLastCellInMainDiagonal and mainDiagonalTotal != magickConstant:
+        return False
     return True
 
 
-def fill(square, sideSize, magickConstant, possibleValues, row, col):
-    for value in possibleValues:
-        if len(square) == row:
+
+def fill(square, sideSize, cachedRowColumnDiagonalCalculations, possibleValues, row, col):
+    values = possibleValues.getValues()
+    for possibleValue in values:
+
+        if len(square) == row and len(square) < sideSize:
             square.append([])
-        if compatible(magickConstant, sideSize, square, row, col, value):
-            # SE CREA COPIA DE LISTA DE VALORES POSIBLES PARA NO MODIFICAR EL ORIGINAL
-            # YA QUE SE ESTA ITERANDO Y PUEDE CREAR INCONSISTENCIAS
-            possibleValuesOfNext = possibleValues.copy()
-            square[row].append(value)
-            possibleValuesOfNext.remove(value)
+
+        if not possibleValue.used and compatible(cachedRowColumnDiagonalCalculations, row, col, possibleValue.value):
+            cachedRowColumnDiagonalCalculations.addItem(row, col, possibleValue.value)
+            if len(square[row]) == col:
+                square[row].append(possibleValue.value)
+            else:
+                square[row][col] = possibleValue.value
+    
+            possibleValues.markUsed(possibleValue)
 
             nextRow = 0
             nextCol = 0
 
-            printSquare(square, sideSize)
-
-            if len(square[row]) == sideSize:
+            if col == sideSize - 1:
                 nextRow = row + 1
                 nextCol = 0
             else:
                 nextRow = row
                 nextCol += col + 1
 
-            if len(possibleValuesOfNext) == 0:
+            if possibleValues.getAvailablesCount() == 0:
                 return True
-            result = fill(square, sideSize, magickConstant, possibleValuesOfNext, nextRow, nextCol)
-            if result:
+
+            solutionExists = fill(square, sideSize, cachedRowColumnDiagonalCalculations, possibleValues, nextRow, nextCol)
+
+            if solutionExists:
                 return True
             else:
-                if len(square[row]) > 0:
-                    square[row].pop()
-                else:
-                    square.pop()
-                if len(possibleValuesOfNext) == 0:
+                cachedRowColumnDiagonalCalculations.removeItem(row, col, possibleValue.value)
+                possibleValues.markUnused(possibleValue)
+                square[row][col] = 0
+                if possibleValues.getAvailablesCount() == 0:
                     return False
     return False
 
 
+
+
 def buildMagicSquare(n):
     square = []
-    possibleValues = [i for i in range(1, n*n+1)]
-    possibleValues = list(reversed(possibleValues))
-    magickConstant = n * (n**2 + 1) / 2
+    values = []
+
+    for i in range(1, n**2 + 1):
+        values.append(PossibleValue(i))
+
+    possibleValues = PossibleValues(reversed(values))
+
+    cachedRowColumnDiagonalCalculations = CachedRowColumnDiagonalCalculations(n)
+
     sideSize = n
-    fill(square, sideSize, magickConstant, possibleValues, 0, 0)
-    printSquare(square, sideSize)
+
+    fill(square, sideSize, cachedRowColumnDiagonalCalculations, possibleValues, 0, 0)
+
+    return square
+
+
+
