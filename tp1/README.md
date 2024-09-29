@@ -15,3 +15,11 @@ Asimismo, para el ejercicio 1 y 2 se dispone del flag `-m` para ejecutar el modo
 Por ejemplo: `./tests.sh ej2 -m`
 
 Es **importante** saber que este ultimo comando, correspondiente a la ejecucion manual del test del ejercicio 2 generara dos diferentes archivos .csv correspondientes a la disposicion final de edificios `archivo_edificios.csv` y un archivo con la disposicion de los restaurantes en la grilla en conjunto a los edificios `archivo_restaurantes.csv`
+
+De forma alternativa, los comandos para correr cada uno de los tests sin usar el script son los siguientes:
+
+- Ejercicio 1: `python3 ej1/ejercicio_1_test.py`
+- Ejercicio 1 Manual: `python3 ej1/ejercicio_1_manual.py`
+- Ejercicio 2: `python3 ej2/ejercicio_2_test.py`
+- Ejercicio 2 Manual: `python3 ej1/ejercicio_2_test.py`
+- Ejercicio 3: `python3 ej1/ejercicio_3_test.py`
