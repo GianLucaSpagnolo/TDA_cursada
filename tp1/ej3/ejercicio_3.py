@@ -1,5 +1,3 @@
-
-
 class PossibleValues:
     availables = 0
     values = []
@@ -169,6 +167,3 @@ def buildMagicSquare(n):
     fill(square, sideSize, cachedRowColumnDiagonalCalculations, possibleValues, 0, 0)
 
     return square
-
-
-
