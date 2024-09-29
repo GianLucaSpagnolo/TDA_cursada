@@ -3,6 +3,9 @@ RADIO_DE_COBERTURA: int = 0.20
 def calcular_radio_de_cobertura(tamano_barrio: int) -> int:
     return round(RADIO_DE_COBERTURA * tamano_barrio)
 
+def calcular_cantidad_edificios(tamano_barrio: int, cantidad_edificios: int) -> int:
+    return round(tamano_barrio ** 2 * cantidad_edificios)
+
 
 def calcular_cobertura(edificio_central: tuple, edificios: list, radio_de_cobertura: int, tamano_barrio: int) -> set:
     """

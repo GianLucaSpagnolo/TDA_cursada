@@ -4,10 +4,11 @@ from random import randint
 import ejercicio_1 as ej1
 
 CANTIDADES_DE_MONEDAS = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+MONEDA_NORMAL = 10
 MONEDA_FALSA = 9
 
 def test_moneda_falsa_random(cantidad):
-    bolsa_de_monedas = [10]*(cantidad - 1)
+    bolsa_de_monedas = [MONEDA_NORMAL]*(cantidad - 1)
     random_pos = randint(0, cantidad - 1)
     bolsa_de_monedas.insert(random_pos, MONEDA_FALSA)
 
@@ -28,7 +29,7 @@ def test_moneda_falsa_random(cantidad):
     print(f"Moneda falsa (ponderado): {moneda_pond} - Tiempo: {time_pond:.8f}\n")
 
 def test_modena_falsa_inicio(cantidad):
-    bolsa_de_monedas = [MONEDA_FALSA] + [10]*(cantidad - 1)
+    bolsa_de_monedas = [MONEDA_FALSA] + [MONEDA_NORMAL]*(cantidad - 1)
 
     time_lineal = process_time()
     moneda_lineal = ej1.wrapper_detectar_moneda_falsa_lineal(bolsa_de_monedas)
@@ -47,7 +48,7 @@ def test_modena_falsa_inicio(cantidad):
     print(f"Moneda falsa (ponderado): {moneda_pond} - Tiempo: {time_pond:.8f}\n")
 
 def test_moneda_falsa_mitad(cantidad):
-    bolsa_de_monedas = [10]*(cantidad//2 - 1) + [MONEDA_FALSA] + [10]*((cantidad//2))
+    bolsa_de_monedas = [MONEDA_NORMAL]*(cantidad//2 - 1) + [MONEDA_FALSA] + [MONEDA_NORMAL]*((cantidad//2))
 
     time_lineal = process_time()
     moneda_lineal = ej1.wrapper_detectar_moneda_falsa_lineal(bolsa_de_monedas)
@@ -66,7 +67,7 @@ def test_moneda_falsa_mitad(cantidad):
     print(f"Moneda falsa (ponderado): {moneda_pond} - Tiempo: {time_pond:.8f}\n")
 
 def test_modena_falsa_final(cantidad):
-    bolsa_de_monedas = [10]*(cantidad - 1) + [MONEDA_FALSA]
+    bolsa_de_monedas = [MONEDA_NORMAL]*(cantidad - 1) + [MONEDA_FALSA]
 
     time_lineal = process_time()
     moneda_lineal = ej1.wrapper_detectar_moneda_falsa_lineal(bolsa_de_monedas)

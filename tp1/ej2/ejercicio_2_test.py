@@ -3,13 +3,13 @@ from random import randint
 import ejercicio_2 as ej2
 
 
-TAMANOS_BARRIO: list = [10, 20, 40, 100, 200] # con 400 ya empieza a haber problemas en cuanto a tiempo de ejecución
+TAMANOS_BARRIO: list = [10, 20, 40, 100, 200] # con 400 ya empieza a haber un largo tiempo de ejecución
 CANTIDAD_EDIFICIOS: float = 0.2
 
 
 def generar_edificios_en_grilla(tamano_barrio: int) -> list:
 
-    cantidad_edificios: int = round(tamano_barrio ** 2 * CANTIDAD_EDIFICIOS)
+    cantidad_edificios: int = ej2.calcular_cantidad_edificios(tamano_barrio, CANTIDAD_EDIFICIOS)
     edificios: list = list()
 
     for _ in range(cantidad_edificios):
