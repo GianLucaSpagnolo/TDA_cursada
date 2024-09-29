@@ -1,4 +1,18 @@
-# Guia de uso de los tests de este TP
+# TRABAJO PRÁCTICO 1 - TEORÍA DE ALGORITMOS (TB024)
+
+2º Cuatrimestre 2024
+Grupo: 5 (She Don’t Give Grafo)
+Curso 03 - Echevarría
+
+## Integrantes
+
+- Pablo Choconi - 106388
+- Valentín Savarese - 107640
+- Gian Luca Spagnolo - 108072
+- Brian Céspedes - 108219
+- Néstor Palavecino - 108244
+
+## Guia de Uso de los Tests
 
 Primero que nada, se debe ejecutar el siguiente comando para darle permisos al script:
 
