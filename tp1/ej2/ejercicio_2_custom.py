@@ -4,11 +4,12 @@ import ejercicio_2 as ej2
 
 # PATH ARCHIVO (Modificar el path en caso de querer probar con un archivo distinto)
 
-PATH_ARCHIVO = "res/test1.csv"
-#PATH_ARCHIVO = "res/test2.csv"
-#PATH_ARCHIVO = "res/test3.csv"
-#PATH_ARCHIVO = "res/test4.csv"
-#PATH_ARCHIVO = "res/test5.csv"
+PATH_ARCHIVO = "ej2/res/test1.csv"
+#PATH_ARCHIVO = "ej2/res/test2.csv"
+#PATH_ARCHIVO = "ej2/res/test3.csv"
+#PATH_ARCHIVO = "ej2/res/test4.csv"
+#PATH_ARCHIVO = "ej2/res/test5.csv"
+#PATH_ARCHIVO = "ej2/res/test_no_optimo.csv"
 
 
 

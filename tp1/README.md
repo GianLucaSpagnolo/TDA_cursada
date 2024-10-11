@@ -36,4 +36,8 @@ De forma alternativa, los comandos para correr cada uno de los tests sin usar el
 - Ejercicio 1 Manual: `python3 ej1/ejercicio_1_manual.py`
 - Ejercicio 2: `python3 ej2/ejercicio_2_test.py`
 - Ejercicio 2 Manual: `python3 ej1/ejercicio_2_test.py`
-- Ejercicio 3: `python3 ej1/ejercicio_3_test.py`
+- Ejercicio 3: `python3 ej3/ejercicio_3_test.py`
+
+## Update
+
+Ahora se dispone del archivo `ejercicio_2_custom.py`. Mediante este archivo, modificando la constante `PATH_ARCHIVO` se puede utilizar un archivo .csv a eleccion con el objetivo de poder replicar casos especificos utilizando sets de datos de forma mas consistente. El comando de ejecucion es el siguiente: `python3 ej2/ejercicio_2_custom.py`. Se recomienda ejecutarlo desde el root para evitar errores.
