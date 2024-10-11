@@ -3,7 +3,12 @@ from random import randint
 
 import ejercicio_1 as ej1
 
+
+# En caso de querer probar con conjuntos de datos mayores, descomentar la linea correspondiente
+
 CANTIDADES_DE_MONEDAS = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+# CANTIDADES_DE_MONEDAS = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000, 5000000, 10000000]
+
 MONEDA_NORMAL = 10
 MONEDA_FALSA = 9
 
