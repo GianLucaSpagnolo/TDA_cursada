@@ -11,7 +11,15 @@ Segundo cuatrimestre 2024
 - [Clase 10/09: Greedy 1](#clase-1009)
 - [Clase 12/09: Greedy 2](#clase-1209)
 - [Clase 17/09: Backtracking 1](#clase-1709)
-- [Clase 19/09](#clase-1909)
+- [Clase 19/09: Backtracking 2](#clase-1909)
+- [Clase 24/09: Programacion Dinamica 1](#clase-2409)
+- [Clase 26/09: Programacion Dinamica 2](#clase-2609)
+- [Clase 01/10: Programacion Dinamica 3](#clase-0110)
+- [Clase 03/10: Programacion Dinamica 4](#clase-0310)
+- [Clase 08/10: Programacion Lineal 1](#clase-0810)
+- [Clase 10/10: Programacion Lineal 2](#clase-1010)
+- [Clase 15/10: Redes de Flujo 1](#clase-1510)
+- [Clase 17/10: Redes de Flujo 2](#clase-1710)
 
 ## Modalidad
 
@@ -1342,3 +1350,318 @@ Existen otros algoritmos para encontrar el casco convexo:
 ---
 
 ## Clase 19/09
+
+Repaso de la clase anterior:
+
+![img](img/repaso_arbol_de_decisiones.png)
+
+Funcionamiento de **Backtracking**:
+
+- Recorre recursivamente el Árbol de Decisiones usando DFS:
+- Verifica el candidato parcial:
+  - Si es la solución:
+    - la devuelve
+- Incrementa el candidato parcial
+- Si no es válido:
+  - retrocede y vuelve a 2
+- Si es válido:
+  - recorre recursivamente desde 1 con el candidato parcial actual
+- Llegado a este punto, el problema no tiene solución
+
+### Sudoku
+
+- Se tiene una grilla de 9x9 celdas
+- La grilla está organizada en 9 bloques de 3x3 celdas
+- En cada bloque deben colocarse todos los dígitos del 1 al 9, sin repetirlos
+- Cada columna y cada fila de la grilla debe tener todos los dígitos del 1 al 9, sin repetirlos
+- Algunas de las celdas ya tienen números asignados
+
+Se desea encontrar una asignación de números a grillas que cumpla con todas las condiciones antes mencionadas
+
+Impementacion:
+
+```python
+def sudoku(actual, M):
+  # Verificar candidato parcial
+  siguiente=proxima_posicion(actual, M)
+  if siguiente >= 81: return True
+
+  # Incrementar candidato parcial
+  for num in range (1,10):
+
+    # Si no es valido, prueba con otro candidato
+
+    if puedo_poner(num, siguiente, M):
+      # Si es valido, llama recursivamente
+      M[fila(siguiente)][columna(siguiente)] = num
+      if sudoku(siguiente, M): return True
+  
+  # Backtrack
+  M[fila(siguiente)][columna(siguiente)]=0
+  return False
+
+```
+
+#### Analogia con Grafos
+
+- Los vértices representan cada celda del Sudoku
+- Las aristas unen vértices que no pueden tener el mismo dígito:
+  - Vértices de la misma fila
+  - Vértices de la misma columna
+  - Vértices del mismo bloque
+
+Se trata de **Coloreo de Grafos!**
+
+### Problema del caballo de ajedrez
+
+- Se tiene un tablero de ajedrez de 8x8 casilleros
+- Se tiene una pieza del caballo
+- El caballo se mueve en forma de L: dos casilleros en una dirección y luego uno en dirección perpendicular (2x1)
+
+Determinar una secuencia de movimientos que permita al caballo pasar por todos los casilleros del tablero sin repetirlos
+
+Implementacion en pseudocodigo:
+
+```python
+def caballo(paso):
+  if completo(): return True
+  x, y = obtener_posicion_actual_caballo()
+  for fila, col in movimientos_caballo(x,y):
+    if not dentro_de_tablero(fila, col): continue
+    if casillero_ya_marcado(fila, col): continue
+    mover_a_posicion(fila, col, paso)
+    if (caballo(paso+1)):
+      return True
+    volver_a_posicion(x,y)
+  return False
+```
+
+#### Analogia con Grafos denuevo
+
+- Los vértices representan cada casillero del tablero
+- Las aristas unen un vértice con los vértices a los que podría moverse el caballo:
+  - Movimiento en forma de L: 2x1
+
+Se trata de un **Camino Hamiltoneano**!
+
+Implementacion con Camino Hamiltoneano:
+
+```python
+def problema_del_caballo(n):
+  # 1. Construir el grafo:
+  #    - Crear los n x n vértices
+  #    - Asignar las aristas a los vértices
+  # 2. Buscar el camino hamiltoniano:
+  return camino_hamiltoniano(grafo)
+```
+
+### Isomorfismo de Grafos
+
+Un isomorfismo de los grafos G y H es una biyección sobre los vértices de G y H  f:V(G)→V(H) tal que cualquier par de vértices (u,v) son adyacentes en G sí y sólo si f(u) y f(v) en H también son adyacentes.
+
+![img](img/isomorfismo_de_grafos.png)
+
+Por **Fuerza Bruta**:
+
+- ¿{1,2,3,4,5,6,7,8} se corresponde con {a,b,c,d,g,h,i,j} ? No
+- ¿{1,2,3,4,5,6,7,8} se corresponde con {a,b,c,d,g,h,j,i} ? No
+- ¿{1,2,3,4,5,6,7,8} se corresponde con {a,b,c,d,g,i,j,h} ? No
+
+Podríamos omitir 6! soluciones posibles sólo por detectar que cualquier solución que vincule {1,2} con {a,b} no puede ser válida
+
+#### Podas posibles
+
+¿Qué podas podemos aplicar?
+
+- A nivel global:
+  - Misma cantidad total de vértices en ambos grafos
+  - Misma cantidad total de aristas en ambos grafos
+- Para cada candidato parcial:
+  - Descartar los vértices candidatos donde el grado es distinto
+  - Descartar los vértices candidatos si las adyacencias son incompatibles
+- Ciclos
+  - Ambos grafos deben tener los mismos ciclos
+
+### Problema: Materias compatibles
+
+Un estudiante debe decidir en qué cursos anotarse:
+
+- Se tienen m Materias {M_1, M_2, …, M_m} para cursar
+- Se conoce la lista de Cursos C_ij (con sus horarios) de cada Materia j (cada Materia j puede tener de 1 a n Cursos)
+- No se puede anotar en más de un Curso por Materia
+- No se puede anotar en dos Cursos que se superpongan
+- Quiere cursar todas las Materias
+
+Determinar todas las combinaciones de Materias y Cursos en que se puede anotar
+
+Analisis del problema:
+
+- Las soluciones tendrán la forma {C_i1, C_j2, …, C_nm}
+- ¿Cuántas combinaciones pueden existir?
+  - Si todas las m materias y cursos fueran compatibles entre sí, y si todas tuvieran n cursos disponibles, existirían nm posibles combinaciones
+
+Estrategia:
+
+- Si ya agoté todas las materias:
+  - Si el candidato parcial es factible
+    - devolver el candidato parcial
+  - Si no
+    - Devolver una solución vacía
+- Si el candidato parcial no es factible:
+  - Devolver una solución vacía
+- Tomar la próxima materia de la lista de materias y removerla
+- Para cada curso de la materia seleccionada:
+  - llamar recursivamente con el candidato parcial + curso seleccionado
+  - agregar las soluciones devueltas a la lista de soluciones halladas
+- Regresar la materia analizada a la lista de materias
+- Devolver la lista de soluciones halladas
+
+Para determinar si un candidato parcial es factible:
+
+- Se parte de un candidato parcial
+- Se toma el último curso agregado al candidato parcial
+- Para cada curso del candidato parcial
+  - Si el curso seleccionado es el último curso agregado:
+    - continuar con el próximo curso del candidato parcial
+  - Si el curso seleccionado y el último curso agregado no son compatibles
+    - terminar y devolver False
+- Llegados hasta aquí, el candidato parcial y el último curso agregado son compatibles: devolver True
+
+#### Analogia con Grafos... otra vez
+
+- Los vértices podrían ser los cursos Cij
+- Las aristas unirían los cursos de materias distintas que son incompatibles entre sí
+- Las aristas también unirían todos los cursos de una misma materia entre sí
+
+Se trata del problema de **Independent Set**!
+
+### Sumatoria de N dados
+
+- Se tienen N dados de M caras
+- Se desea sumar un total S
+
+Determinar todos los lanzamientos de los N dados que suman S
+
+Analisis:
+
+- Las soluciones tendrán la forma {D_1, D_2, …, D_n}, donde D_i es el valor que dio el i-ésimo dado al ser lanzado
+- ¿Cuántas combinaciones pueden existir?
+  - Si m es la cantidad de caras del dado, existirían m^n posibles permutaciones
+
+Estrategia:
+
+- Si la cantidad de elementos del candidato parcial es N y su suma es S:
+  - Agregar el candidato parcial a la lista de soluciones y volver
+- Podas:
+  - Si la longitud del candidato parcial es N, volver
+  - Si Sum(candidato parcial) es mayor o igual que S, volver
+  - Si Sum(candidato parcial) + [N-Len(candidato parcial)]*M < S, volver
+  - Si Sum(candidato parcial) + [N-Len(candidato parcial)]*1 > S, volver
+- Para cada valor posible de un lanzamiento:
+  - Incrementar el candidato parcial con el valor
+  - Llamar recursivamente con el candidato parcial + valor obtenido
+  - Descartar el candidato parcial incrementado
+- Volver
+
+#### Analogia pero con otro problema similar
+
+- Cada lanzamiento posible podría ser un elemento a considerar
+- El valor de cada dado podría ser su peso
+- La suma total de los dados podría ser la capacidad a completar
+
+Es el **Problema de la Mochila**!
+
+### Sumatoria de Subconjuntos (Subset Sum)
+
+- Se tiene un **multiset** (un set que admite elementos repetidos) S de n números naturales
+- Se define un valor T como suma objetivo
+
+Se quiere determinar si existe un subconjunto de S tal que sus elementos sumen exactamente T
+
+Analisis:
+
+- Las soluciones tendrán la forma {e_1, e_2, …, e_k}, donde e_i es un elemento de S
+- ¿Cuántas combinaciones pueden existir?
+  - Si hay n elementos en S, habría 2n subconjuntos
+  - Verificar la suma de cada subconjunto demandaría O(n)
+  - La complejidad de Fuerza Bruta sería O(2nn)
+
+Estrategia:
+
+- Si el candidato parcial suma T, devolverlo
+- Podas:
+  - Si la suma del candidato parcial excede T, devolver una solución vacía
+  - Si no quedan elementos por analizar, devolver una solución vacía
+- Incrementar el candidato parcial con el próximo elemento de S (pero con un elemento menos en S)
+- Llamar recursivamente con el candidato parcial incrementado
+- Si la llamada recursiva devuelve una solución:
+  - Devolverla
+- Llamar recursivamente con el candidato sin incrementar (pero con un elemento menos en S)
+- Devolver el resultado de la llamada recursiva
+
+Y si, este problema tambien se puede representar como una analogia del **Problema de la Mochila**...
+
+### Podas en Problemas de Optimizacion
+
+- Tengo un Problema de Optimización (maximizar o minimizar xxxxx)
+- Ya encontré una solución completa y válida, conozco su valor
+- Puedo usarla como cota para podar:
+  - En un problema de minimización, usar ese valor conocido para podar candidatos parciales que lo excedan
+  - En un problema de maximización, usar ese valor conocido para podar un candidato parcial que nunca logre alcanzarlo
+
+Como obtener una cota desde la primer iteracion para mejorar las podas:
+
+- Usar un algoritmo **greedy** para encontrar una primer solución
+- Usar ese resultado (subóptimo) como cota para las primeras podas
+- Cuando encuentro una solución por Backtracking, actualizo la cota y sigo podando
+
+---
+
+## Clase 24/09
+
+
+
+---
+
+## Clase 26/09
+
+
+
+
+---
+
+## Clase 01/10
+
+
+
+---
+
+## Clase 03/10
+
+
+
+---
+
+## Clase 08/10
+
+
+
+---
+
+## Clase 10/10
+
+
+
+---
+
+## Clase 15/10
+
+
+
+---
+
+## Clase 17/10
+
+
+
+---
