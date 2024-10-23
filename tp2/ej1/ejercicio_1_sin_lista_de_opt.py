@@ -11,31 +11,29 @@ def elegir_trabajo_primera_semana(seleccionados: list) -> None:
 
 def elegir_trabajo_segunda_semana(seleccionados: list) -> None:
 
-    opt_anterior: int = elegir_trabajo_primera_semana(seleccionados)
-    opt: int = max(opt_anterior + trabajos_tranquilos[2], trabajos_estresantes[2])
-
-    if opt == trabajos_tranquilos[2] + opt_anterior:
+    opt_ant: int = elegir_trabajo_primera_semana(seleccionados)
+    opt: int = max(opt_ant + trabajos_tranquilos[2], trabajos_estresantes[2])
+    if opt == trabajos_tranquilos[2] + opt_ant:
         seleccionados.append("t2")
     else:
         seleccionados.pop()
         seleccionados.append("e2")
-    
-    return opt, opt_anterior
+
+    return opt, opt_ant
 
 
-def elegir_trabajo_a_realizar(opt_anterior: int, opt_ante_anterior: int, i: int, seleccionados: list) -> None:
+def elegir_trabajo(opt_ant: int, opt_ante_ant: int, i: int, seleccionados: list) -> None:
 
-    opt = max(opt_anterior + trabajos_tranquilos[i], opt_ante_anterior + trabajos_estresantes[i])
-    if opt == trabajos_tranquilos[i] + opt_anterior:
+    opt = max(opt_ant + trabajos_tranquilos[i], opt_ante_ant + trabajos_estresantes[i])
+    if opt == trabajos_tranquilos[i] + opt_ant:
         seleccionados.append(f"t{i}")
     else:
         seleccionados.pop()
         seleccionados.append(f"e{i}")
-    
-    opt_ante_anterior = opt_anterior
-    opt_anterior = opt
+    opt_ante_ant = opt_ant
+    opt_ant = opt
 
-    return opt_anterior, opt_ante_anterior
+    return opt_ant, opt_ante_ant
 
 
 def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list) -> tuple:
@@ -47,12 +45,12 @@ def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list)
 
     seleccionados: list = list()
 
-    opt_actual, opt_anterior = elegir_trabajo_segunda_semana(seleccionados)
+    opt_act, opt_ant = elegir_trabajo_segunda_semana(seleccionados)
 
     for i in range(3, n):
-        opt_actual, opt_anterior = elegir_trabajo_a_realizar(opt_actual, opt_anterior, i, seleccionados)
+        opt_act, opt_ant = elegir_trabajo(opt_act, opt_ant, i, seleccionados)
 
-    return opt_actual, seleccionados
+    return opt_act, seleccionados
 
 
 print("\nEJEMPLO 1")
