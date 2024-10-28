@@ -1,0 +1,4 @@
+X1 = Cantidad de carpas
+X2 = Cantidad de toldos
+X3 = Cantidad de sombrillas
+X4 = Booleano bar
