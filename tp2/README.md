@@ -27,3 +27,17 @@ En caso de querer incluir tests adicionales, se puede agregar un archivo .csv al
 - Columna 2: Trabajo estresante
 
 Asimismo, para este ejercicio se disponen de numerosos archivos .csv ingresados previamente con datasets de hasta 10000 entradas, para poder visualizar diferentes resultados y tiempos de ejecucion con determinados conjuntos de datos.
+
+### Ejercicio 2
+
+### Ejercicio 3
+
+Para ejecutar el archivo `ejercicio_3.bas` se debe tener instalado **PCBASIC**.
+
+Documentacion. ![link](https://robhagemans.github.io/pcbasic/)
+
+Instalacion en Linux: `pip3 install pcbasic`
+
+Para poder ejecutar el archivo en este interprete, se debe usar el siguiente comando (desde el directorio TP2): `pcbasic ej3/ejercicio_3.bas`
+
+Ademas, en el mismo directorio correspondiente a este ejercicio, se dispone de la carpeta `res` la cual incluye varios archivos .csv los cuales se pueden utilizar como referencia al momento de ingresar los ejes que conectan los nodos.
