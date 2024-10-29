@@ -34,7 +34,7 @@ Asimismo, para este ejercicio se disponen de numerosos archivos .csv ingresados 
 
 Para ejecutar el archivo `ejercicio_3.bas` se debe tener instalado **PCBASIC**.
 
-Documentacion. ![link](https://robhagemans.github.io/pcbasic/)
+Documentacion: <https://robhagemans.github.io/pcbasic/>
 
 Instalacion en Linux: `pip3 install pcbasic`
 
