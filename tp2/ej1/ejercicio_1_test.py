@@ -3,7 +3,8 @@ import ejercicio_1 as ej1
 import ejercicio_1_sin_lista_de_opt as ej1_no_opt
 
 
-# PATH ARCHIVO (para testear con diferentes sets de datos). En caso de querer agregar un testeo propio, cambiar la constante PATH_ARCHIVO
+# PATH ARCHIVO (para testear con diferentes sets de datos). 
+# En caso de querer agregar un testeo propio, cambiar la constante PATH_ARCHIVO (siempre debe haber 1 constante PATH_ARCHIVO sin comentar)
 
 #PATH_ARCHIVO = "ej1/res/trabajos_10.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_50.csv"
@@ -13,6 +14,8 @@ import ejercicio_1_sin_lista_de_opt as ej1_no_opt
 #PATH_ARCHIVO = "ej1/res/trabajos_5000.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_10000.csv"
 PATH_ARCHIVO = "ej1/res/test_brian.csv"
+
+
 
 
 def leer_csv_para_identificar_trabajos(archivo: str) -> tuple:
