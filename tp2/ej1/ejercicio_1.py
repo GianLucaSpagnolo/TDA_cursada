@@ -1,4 +1,4 @@
-def elegir_trabajo_primera_semana(opt: list, seleccionados: list) -> None:
+def elegir_trabajo_primera_semana(opt: list, seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
 
     opt[1] = max(trabajos_tranquilos[1], trabajos_estresantes[1])
 
@@ -8,7 +8,7 @@ def elegir_trabajo_primera_semana(opt: list, seleccionados: list) -> None:
         seleccionados.append("e1")
 
 
-def elegir_trabajo_segunda_semana(opt: list, seleccionados: list) -> None:
+def elegir_trabajo_segunda_semana(opt: list, seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
 
     opt[2] = max(opt[1] + trabajos_tranquilos[2], trabajos_estresantes[2])
 
@@ -19,7 +19,7 @@ def elegir_trabajo_segunda_semana(opt: list, seleccionados: list) -> None:
         seleccionados.append("e2")
 
 
-def elegir_trabajo(opt: list, i: int, seleccionados: list) -> None:
+def elegir_trabajo(opt: list, i: int, seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
 
     opt[i] = max(opt[i - 1] + trabajos_tranquilos[i], opt[i - 2] + trabajos_estresantes[i])
 
@@ -42,31 +42,31 @@ def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list)
 
     seleccionados: list = list()
 
-    elegir_trabajo_primera_semana(opt, seleccionados)
-    elegir_trabajo_segunda_semana(opt, seleccionados)
+    elegir_trabajo_primera_semana(opt, seleccionados, trabajos_tranquilos, trabajos_estresantes)
+    elegir_trabajo_segunda_semana(opt, seleccionados, trabajos_tranquilos, trabajos_estresantes)
 
     for i in range(3, n):
-        elegir_trabajo(opt, i, seleccionados)
+        elegir_trabajo(opt, i, seleccionados, trabajos_tranquilos, trabajos_estresantes)
 
     return opt[n - 1], seleccionados
 
 
-print("\nEJEMPLO 1")
-trabajos_estresantes: list = [8, 6, 20, 2, 9]
-trabajos_tranquilos: list = [8, 6, 4, 5, 2]
+# print("\nEJEMPLO 1")
+# trabajos_estresantes: list = [8, 6, 20, 2, 9]
+# trabajos_tranquilos: list = [8, 6, 4, 5, 2]
 
-beneficio, trabajos_a_realizar = seleccion_de_trabajos(trabajos_estresantes, trabajos_tranquilos)
-print(f"\n\tSe ha obtenido un beneficio total de {beneficio}.")
-print(f"\nLos trabajos a realizar son: {trabajos_a_realizar}.")
-
-
-print("\n\n")
+# beneficio, trabajos_a_realizar = seleccion_de_trabajos(trabajos_estresantes, trabajos_tranquilos)
+# print(f"\n\tSe ha obtenido un beneficio total de {beneficio}.")
+# print(f"\nLos trabajos a realizar son: {trabajos_a_realizar}.")
 
 
-print("EJEMPLO 2")
-trabajos_estresantes: list = [8, 8, 15, 7, 12, 17, 9, 29]
-trabajos_tranquilos: list = [7, 9, 5, 15, 10, 12, 11, 14]
+# print("\n\n")
 
-beneficio, trabajos_a_realizar = seleccion_de_trabajos(trabajos_estresantes, trabajos_tranquilos)
-print(f"\n\tSe ha obtenido un beneficio total de {beneficio}.")
-print(f"\nLos trabajos a realizar son: {trabajos_a_realizar}.\n")
+
+# print("EJEMPLO 2")
+# trabajos_estresantes: list = [8, 8, 15, 7, 12, 17, 9, 29]
+# trabajos_tranquilos: list = [7, 9, 5, 15, 10, 12, 11, 14]
+
+# beneficio, trabajos_a_realizar = seleccion_de_trabajos(trabajos_estresantes, trabajos_tranquilos)
+# print(f"\n\tSe ha obtenido un beneficio total de {beneficio}.")
+# print(f"\nLos trabajos a realizar son: {trabajos_a_realizar}.\n")
