@@ -5,11 +5,13 @@ import ejercicio_1_sin_lista_de_opt as ej1_no_opt
 
 # PATH ARCHIVO (para testear con diferentes sets de datos). En caso de querer agregar un testeo propio, cambiar la constante PATH_ARCHIVO
 
-#PATH_ARCHIVO = "ej1/res/test1.csv"
-#PATH_ARCHIVO = "ej1/res/test2.csv"
-#PATH_ARCHIVO = "ej1/res/test3.csv"
-#PATH_ARCHIVO = "ej1/res/test4.csv"
-#PATH_ARCHIVO = "ej1/res/test5.csv"
+#PATH_ARCHIVO = "ej1/res/trabajos_10.csv"
+#PATH_ARCHIVO = "ej1/res/trabajos_50.csv"
+#PATH_ARCHIVO = "ej1/res/trabajos_100.csv"
+#PATH_ARCHIVO = "ej1/res/trabajos_500.csv"
+#PATH_ARCHIVO = "ej1/res/trabajos_1000.csv"
+#PATH_ARCHIVO = "ej1/res/trabajos_5000.csv"
+#PATH_ARCHIVO = "ej1/res/trabajos_10000.csv"
 PATH_ARCHIVO = "ej1/res/test_brian.csv"
 
 
@@ -57,5 +59,7 @@ def test_ej2() -> None:
     print(f"Se ha obtenido un beneficio total de {beneficio_no_opt}.")
     print(f"Los trabajos a realizar son: {trabajos_a_realizar_no_opt}.")
 
+    assert(beneficio == beneficio_no_opt)
+    assert(trabajos_a_realizar == trabajos_a_realizar_no_opt)
 
 test_ej2()
