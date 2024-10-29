@@ -1,0 +1,89 @@
+## Tamaño de concesión
+
+Espacio - Espacio libre - Espacio administrativo
+10000 - 3000 - 400 = 6600
+
+Espacio disponible
+
+6600 metros cuadrados
+
+
+
+## Cantidad de carpas
+
+- La cantidad no puede superar las 500
+- Cada carpa ocupa 10 metros cuadrados
+- Se alquilan a 3 millones de pesos por mes
+
+## Cantidad de toldos
+
+- La cantidad no puede superar las 200
+- Cada toldo ocupa 5 metros cuadrados
+- Se alquilan a 1 millón de pesos por mes
+
+## Cantidad de sombrillas
+
+- Cada sombrilla ocupa 5 metros cuadrados
+- Se alquilan a 500 mil pesos por mes
+
+## Cantidad de bares
+
+- Solo hay un bar
+- Ocupa 100 metros cuadrados
+- Aporta un ingreso adicional de 15 millones de pesos
+
+## Datos adicionales
+
+- Se calcula que la demanda de carpas será el doble de la demanda de toldos
+
+
+
+
+
+
+## OBJETIVO
+
+
+Maximizar la facturación durante la próxima temporada por metro cuadrado
+
+x1 = Cantidad de carpas
+
+x2 = Cantidad de toldos
+
+x3 = Cantidad de sombrillas
+
+x4 = Cantidad de bares
+
+
+Z(max) = 3 000 000 * x1 + 1 000 000 * x2 + 500 000 * x3 + 15 000 000 * x4
+
+
+
+
+
+
+## Restricciones
+
+(Cantidad de carpas no puede superar las 500)
+x1 <= 500 
+
+(Cantidad de toldos no puede superar las 200)
+x2 <= 200 
+
+(No se puede superar el espacio disponible)
+10 * x1 + 5 * x2 + 5 * x3 + 100 * x4 = 6600
+
+(Solo hay un bar)
+0 <= x4 <= 1
+
+(Cantidad de carpas es el doble de la cantidad de toldos por la demanda)
+
+(REVISAR) x1 = 2 * x2
+
+
+Esto es debido a que x1 puede ser más grande que el doble de x2
+
+Todas las reestricciones incluyen igualdad por lo que es posible calcular el óptimo
+
+
+
