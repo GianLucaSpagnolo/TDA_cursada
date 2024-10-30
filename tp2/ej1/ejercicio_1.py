@@ -13,7 +13,6 @@ def elegir_trabajo_segunda_semana(opt: list, seleccionados: list, trabajos_tranq
     if opt[2] == trabajos_tranquilos[2] + opt[1]:
         seleccionados.append("t2")
     else:
-        seleccionados.pop()
         seleccionados.append("e2")
 
 
@@ -26,14 +25,20 @@ def elegir_trabajo(opt: list, i: int, seleccionados: list, trabajos_tranquilos: 
         seleccionados.append(f"e{i}")
 
 
-def ajustar_lista_seleccionados(seleccionados: list) -> None:
+def ajustar_lista_seleccionados(seleccionados: list) -> list:
 
-    i = len(seleccionados) - 1
+    aux: list = []
+    i: int = len(seleccionados) - 1
+
+    # Recorro la lista de fin a principio, si encuentro un trabajo estresante, ignoro el inmediatamente anterior y continuo iterando.
     while i > 0:
-        if "e" in seleccionados[i]:
-            del seleccionados[i - 1]
+        aux.append(seleccionados[i])
+        if "e" == seleccionados[i][0]:
             i -= 1
         i -= 1
+    aux.reverse()
+
+    return aux
 
 
 def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list) -> tuple:
@@ -44,7 +49,7 @@ def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list)
 
     n: int = len(trabajos_estresantes)
     opt: list = [0] * n
-    seleccionados: list = list()
+    seleccionados: list = [0]
 
     elegir_trabajo_primera_semana(opt, seleccionados, trabajos_tranquilos, trabajos_estresantes)
     elegir_trabajo_segunda_semana(opt, seleccionados, trabajos_tranquilos, trabajos_estresantes)
@@ -52,6 +57,6 @@ def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list)
     for i in range(3, n):
         elegir_trabajo(opt, i, seleccionados, trabajos_tranquilos, trabajos_estresantes)
 
-    ajustar_lista_seleccionados(seleccionados)
+    seleccionados = ajustar_lista_seleccionados(seleccionados)
 
     return opt[n - 1], seleccionados
