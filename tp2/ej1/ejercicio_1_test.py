@@ -36,7 +36,7 @@ def verificacion_de_planificacion(trabajos: list) -> bool:
     for i in range(1, len(trabajos)):
         numero_trabajo: int = int(trabajos[i][1:])
         numero_trabajo_anterior: int = int(trabajos[i - 1][1:])
-        if trabajos[i][0] == "e" and numero_trabajo - numero_trabajo_anterior == 1:
+        if trabajos[i][0] == "e" and numero_trabajo - numero_trabajo_anterior != 2:
             return False
     return True
 
