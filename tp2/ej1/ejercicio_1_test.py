@@ -6,14 +6,14 @@ import ejercicio_1_sin_lista_de_opt as ej1_no_opt
 # PATH ARCHIVO (para testear con diferentes sets de datos). 
 # En caso de querer agregar un testeo propio, cambiar la constante PATH_ARCHIVO (siempre debe haber 1 constante PATH_ARCHIVO sin comentar)
 
-#PATH_ARCHIVO = "ej1/res/trabajos_10.csv"
+PATH_ARCHIVO = "ej1/res/trabajos_10.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_50.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_100.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_500.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_1000.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_5000.csv"
 #PATH_ARCHIVO = "ej1/res/trabajos_10000.csv"
-PATH_ARCHIVO = "ej1/res/test_brian.csv"
+#PATH_ARCHIVO = "ej1/res/test_brian.csv"
 
 
 
@@ -31,6 +31,14 @@ def leer_csv_para_identificar_trabajos(archivo: str) -> tuple:
             cantidad_trabajos += 1
 
     return cantidad_trabajos, trabajos_tranquilos, trabajos_estresantes
+
+def verificacion_de_planificacion(trabajos: list) -> bool:
+    for i in range(1, len(trabajos)):
+        numero_trabajo: int = int(trabajos[i][1:])
+        numero_trabajo_anterior: int = int(trabajos[i - 1][1:])
+        if trabajos[i][0] == "e" and numero_trabajo - numero_trabajo_anterior == 1:
+            return False
+    return True
 
 
 def test_ej2() -> None:
@@ -64,5 +72,10 @@ def test_ej2() -> None:
 
     assert(beneficio == beneficio_no_opt)
     assert(trabajos_a_realizar == trabajos_a_realizar_no_opt)
+
+    if (verificacion_de_planificacion(trabajos_a_realizar)):
+        print("\n\033[32;1mLa planificación de trabajos es correcta.\033[0m\n")
+    else:
+        print("\n\033[31;1mLa planificación de trabajos es incorrecta.\033[0m\n")
 
 test_ej2()
