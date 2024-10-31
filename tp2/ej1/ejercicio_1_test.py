@@ -1,6 +1,6 @@
 from time import process_time
 import ejercicio_1 as ej1
-import ejercicio_1_sin_lista_de_opt as ej1_no_opt
+import ejercicio_1_con_lista_de_opt as ej1_con_lista
 
 # PATH ARCHIVO (para testear con diferentes sets de datos). 
 # En caso de querer agregar un testeo propio, cambiar la constante PATH_ARCHIVO (siempre debe haber 1 constante PATH_ARCHIVO sin comentar)
@@ -46,7 +46,18 @@ def test_ej2() -> None:
 
     print(f"\n\033[31;1;4mTest con archivo:\033[0m {PATH_ARCHIVO}")
 
-    print("\n\033[31;1;4mPlanificacion de trabajos (con lista de optimos):\033[0m\n")
+    print("\n\033[31;1;4mPlanificación de trabajos (con lista de óptimos):\033[0m\n")
+    cantidad_trabajos_con_lista, trabajos_tranquilos_con_lista, trabajos_estresantes_con_lista = leer_csv_para_identificar_trabajos(PATH_ARCHIVO)
+
+    start_time: float = process_time()
+    beneficio_con_lista, trabajos_a_realizar_con_lista = ej1_con_lista.seleccion_de_trabajos(trabajos_tranquilos_con_lista, trabajos_estresantes_con_lista)
+    end_time: float = process_time() - start_time
+
+    print(f"Tiempo de ejecución para \033[31;1mn = {cantidad_trabajos_con_lista}\033[0m: {end_time:.8f} segundos")
+    print(f"Se ha obtenido un beneficio total de {beneficio_con_lista}.")
+    print(f"Los trabajos a realizar son: {trabajos_a_realizar_con_lista}.")
+
+    print("\n\033[31;1;4mPlanificación de trabajos (sin lista de óptimos):\033[0m\n")
     cantidad_trabajos, trabajos_tranquilos, trabajos_estresantes = leer_csv_para_identificar_trabajos(PATH_ARCHIVO)
 
     start_time: float = process_time()
@@ -57,19 +68,8 @@ def test_ej2() -> None:
     print(f"Se ha obtenido un beneficio total de {beneficio}.")
     print(f"Los trabajos a realizar son: {trabajos_a_realizar}.")
 
-    print("\n\033[31;1;4mPlanificacion de trabajos (sin lista de optimos):\033[0m\n")
-    cantidad_trabajos_no_opt, trabajos_tranquilos_no_opt, trabajos_estresantes_no_opt = leer_csv_para_identificar_trabajos(PATH_ARCHIVO)
-
-    start_time: float = process_time()
-    beneficio_no_opt, trabajos_a_realizar_no_opt = ej1_no_opt.seleccion_de_trabajos(trabajos_tranquilos_no_opt, trabajos_estresantes_no_opt)
-    end_time: float = process_time() - start_time
-
-    print(f"Tiempo de ejecución para \033[31;1mn = {cantidad_trabajos_no_opt}\033[0m: {end_time:.8f} segundos")
-    print(f"Se ha obtenido un beneficio total de {beneficio_no_opt}.")
-    print(f"Los trabajos a realizar son: {trabajos_a_realizar_no_opt}.")
-
-    assert(beneficio == beneficio_no_opt)
-    assert(trabajos_a_realizar == trabajos_a_realizar_no_opt)
+    assert(beneficio == beneficio_con_lista)
+    assert(trabajos_a_realizar == trabajos_a_realizar_con_lista)
 
     if (verificacion_de_planificacion(trabajos_a_realizar)):
         print("\n\033[32;1mLa planificación de trabajos es correcta.\033[0m\n")
