@@ -51,20 +51,19 @@ def ajustar_lista_seleccionados(seleccionados: list) -> list:
     return aux
 
 
-def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list) -> tuple:
+def seleccion_de_trabajos(trabajos_tranquilos: list, trabajos_estresantes: list) -> tuple:
 
     # Agrego un 0 en el indice 0 para "descartarlo" (usaremos a partir del indice 1 para simplificar).
-    trabajos_estresantes.insert(0, 0)
     trabajos_tranquilos.insert(0, 0)
+    trabajos_estresantes.insert(0, 0)
 
-    n: int = len(trabajos_estresantes)
+    n: int = len(trabajos_tranquilos)
     seleccionados: list = [0]
 
     opt_actual, opt_anterior = elegir_trabajo_segunda_semana(seleccionados, trabajos_tranquilos, trabajos_estresantes)
 
     for i in range(3, n):
         opt_actual, opt_anterior = elegir_trabajo(opt_actual, opt_anterior, i, seleccionados, trabajos_tranquilos, trabajos_estresantes)
-    
     seleccionados = ajustar_lista_seleccionados(seleccionados)
 
     return opt_actual, seleccionados
