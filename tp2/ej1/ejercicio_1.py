@@ -1,28 +1,38 @@
-def elegir_trabajo_primera_semana(opt: list, seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
+def elegir_trabajo_primera_semana(seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
 
-    opt[1] = max(trabajos_tranquilos[1], trabajos_estresantes[1])
-    if opt[1] == trabajos_tranquilos[1]:
+    opt_actual: int = max(trabajos_tranquilos[1], trabajos_estresantes[1])
+    if opt_actual == trabajos_tranquilos[1]:
         seleccionados.append("t1")
     else:
         seleccionados.append("e1")
 
+    return opt_actual
 
-def elegir_trabajo_segunda_semana(opt: list, seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
 
-    opt[2] = max(opt[1] + trabajos_tranquilos[2], trabajos_estresantes[2])
-    if opt[2] == trabajos_tranquilos[2] + opt[1]:
+def elegir_trabajo_segunda_semana(seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
+
+    opt_anterior: int = elegir_trabajo_primera_semana(seleccionados, trabajos_tranquilos, trabajos_estresantes)
+    opt_actual: int = max(opt_anterior + trabajos_tranquilos[2], trabajos_estresantes[2])
+    if opt_actual == trabajos_tranquilos[2] + opt_anterior:
         seleccionados.append("t2")
     else:
         seleccionados.append("e2")
 
+    return opt_actual, opt_anterior
 
-def elegir_trabajo(opt: list, i: int, seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
 
-    opt[i] = max(opt[i - 1] + trabajos_tranquilos[i], opt[i - 2] + trabajos_estresantes[i])
-    if opt[i] == trabajos_tranquilos[i] + opt[i - 1]:
+def elegir_trabajo(opt_actual: int, opt_anterior: int, i: int, seleccionados: list, trabajos_tranquilos: list, trabajos_estresantes: list) -> None:
+
+    opt = max(opt_actual + trabajos_tranquilos[i], opt_anterior + trabajos_estresantes[i])
+    if opt == trabajos_tranquilos[i] + opt_actual:
         seleccionados.append(f"t{i}")
     else:
         seleccionados.append(f"e{i}")
+
+    opt_anterior = opt_actual
+    opt_actual = opt
+
+    return opt_actual, opt_anterior
 
 
 def ajustar_lista_seleccionados(seleccionados: list) -> list:
@@ -41,22 +51,19 @@ def ajustar_lista_seleccionados(seleccionados: list) -> list:
     return aux
 
 
-def seleccion_de_trabajos(trabajos_estresantes: list, trabajos_tranquilos: list) -> tuple:
+def seleccion_de_trabajos(trabajos_tranquilos: list, trabajos_estresantes: list) -> tuple:
 
-    # Agrego un 0 en el indice 0 para "descartarlo" (usaremos a partir del indice 1 para simplificar)
-    trabajos_estresantes.insert(0, 0)
+    # Agrego un 0 en el indice 0 para "descartarlo" (usaremos a partir del indice 1 para simplificar).
     trabajos_tranquilos.insert(0, 0)
+    trabajos_estresantes.insert(0, 0)
 
-    n: int = len(trabajos_estresantes)
-    opt: list = [0] * n
+    n: int = len(trabajos_tranquilos)
     seleccionados: list = [0]
 
-    elegir_trabajo_primera_semana(opt, seleccionados, trabajos_tranquilos, trabajos_estresantes)
-    elegir_trabajo_segunda_semana(opt, seleccionados, trabajos_tranquilos, trabajos_estresantes)
+    opt_actual, opt_anterior = elegir_trabajo_segunda_semana(seleccionados, trabajos_tranquilos, trabajos_estresantes)
 
     for i in range(3, n):
-        elegir_trabajo(opt, i, seleccionados, trabajos_tranquilos, trabajos_estresantes)
-
+        opt_actual, opt_anterior = elegir_trabajo(opt_actual, opt_anterior, i, seleccionados, trabajos_tranquilos, trabajos_estresantes)
     seleccionados = ajustar_lista_seleccionados(seleccionados)
 
-    return opt[n - 1], seleccionados
+    return opt_actual, seleccionados
