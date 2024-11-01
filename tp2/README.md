@@ -16,7 +16,7 @@ Curso 03 - Echevarría
 
 ### Ejercicio 1
 
-Para el **Ejercicio 1** se dispone del archivo `ejercicio_1_test.py` el cual permite leer un archivo .csv para identificar trabajos tanto tranquilos como estresantes, y asi poder ejecutar nuestras dos implementaciones de este problema: `ejercicio_1.py` (con lista de optimos) y `ejercicio_1_sin_lista_de_opt.py` (sin lista de optimos), mostrando la diferencia de los tiempos de ejecucion de ambos algoritmos.
+Para el **Ejercicio 1** se dispone del archivo `ejercicio_1_test.py` el cual permite leer un archivo .csv para identificar trabajos tanto tranquilos como estresantes, y asi poder ejecutar nuestras dos implementaciones de este problema: `ejercicio_1.py` (con lista de optimos) y `ejercicio_1_sin_lista_de_opt.py` (sin lista de optimos), mostrando la diferencia de los tiempos de ejecucion de ambos algoritmos. Nuestra implementacion de este algoritmo es **sin lista de optimos**, siendo esta optimizada al no usar espacio en memoria adicional.
 
 **Comando para ejecutar el archivo de test** (desde el directorio TP2): `python3 ej1/ejercicio_1_test.py`
 

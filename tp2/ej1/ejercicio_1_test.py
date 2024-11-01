@@ -57,7 +57,7 @@ def test_ej2() -> None:
     print(f"Se ha obtenido un beneficio total de {beneficio_con_lista}.")
     print(f"Los trabajos a realizar son: {trabajos_a_realizar_con_lista}.")
 
-    print("\n\033[31;1;4mPlanificación de trabajos (sin lista de óptimos):\033[0m\n")
+    print("\n\033[31;1;4mPlanificación de trabajos (sin lista de óptimos) - Implementacion definitiva:\033[0m\n")
     cantidad_trabajos, trabajos_tranquilos, trabajos_estresantes = leer_csv_para_identificar_trabajos(PATH_ARCHIVO)
 
     start_time: float = process_time()
