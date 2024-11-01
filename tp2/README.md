@@ -29,7 +29,19 @@ En caso de querer incluir tests adicionales, se puede agregar un archivo .csv al
 Asimismo, para este ejercicio se disponen de numerosos archivos .csv ingresados previamente con datasets de hasta 10000 entradas, para poder visualizar diferentes resultados y tiempos de ejecucion con determinados conjuntos de datos.
 
 ### Ejercicio 2
+Para el **Ejercicio 2** se utiliza el software **LINDO** para resolver un problema de programación lineal
 
+Instalación de **LINDO** en Windows:
+
+Descargar LINDO desde la página oficial: <https://www.lindo.com/index.php/ls-downloads>
+
+Seleccionar **Classic LINDO** y ejercutar el **.exe**
+
+**PARA REPLICAR LOS RESULTADOS**
+
+Abrir lindo y cargar el `Ejercicio 2 PL.ltx` que esta dentro de la carpeta ej2, una vez cargado darle al boton de **solve** para ejecutar. Les va a salir un warning en ingles de que el problema esta escalado pobremente, simplemente darle al boton de **OK**.
+
+Dentro de la carpeta **res** en la carpeta ej2 van a encontrar 2 capturas de pantalla, una con el codigo en **LINDO** y otra con el resultado.
 
 
 ### Ejercicio 3
