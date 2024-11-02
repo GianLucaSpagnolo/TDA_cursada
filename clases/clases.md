@@ -1619,7 +1619,355 @@ Como obtener una cota desde la primer iteracion para mejorar las podas:
 
 ## Clase 24/09
 
+### Programacion Dinamica
 
+La **Programacion Dinamica** es una tecnica de diseño de algoritmos, similar a la Division y Conquista, que se utiliza para resolver problemas de optimizacion sujetos a restricciones.
+
+Creado por Bellman, representa la *planificacion de decisiones que cambian a lo largo del tiempo*.
+
+- Se parece a D&C en que divide el problema en partes más pequeñas
+- Se diferencia de D&C en que tiene un enfoque Bottom-Up
+  - Bottom-Up: toma el caso base y lo usa para resolver subproblemas cada vez más grandes hasta llegar al problema a resolver
+  - Top-Down (D&C): toma el problema a resolver y lo divide en subproblemas cada vez más chicos hasta llegar al caso base
+- Es especialmente útil para resolver problemas de optimización
+- Los problemas que se resuelven por Programación Dinámica también pueden **resolverse recursivamente**
+- Se puede usar una **Relación de Recurrencia** para establecer su complejidad temporal
+
+#### Caracteristicas de PD
+
+- **Subestructura Optima**: La solucion optima de un problema puede construirse a partir de la solucion optima de sus subproblemas.
+- **Subproblemas Superpuestos**: Los subproblemas se repiten a lo largo del proceso de resolucion, permitiendo la reutilizacion de soluciones previamente calculadas.
+
+#### Memorizacion
+
+La tecnica de **Memorizacion** consiste en almacenar los resultados de subproblemas ya resueltos para evitar calculos redundantes.
+
+Esto mejora la eficiencia de los algoritmos, reduciendo el tiempo de ejecucion de exponencial a polinomial en muchos casos.
+
+#### Ejemplos de problemas resueltos por PD
+
+Existen numerosos problemas que se pueden resolver de mejor forma aplicando **Programacion Dinamica**, como el Problema de la Mochila, el Problema de Fibonacci, el Problema de Planificacion de Intervalos, etc...
+
+##### Problema de Fibonacci con PD
+
+Se puede resolver de manera ineficiente con recursion, pero se optimiza usando **Memorizacion** para evitar calculos repetidos.
+
+```python
+def fib_con_memoria(n):
+  M_FIB = [None] * (n+1)
+  return fib_memoized(n, M_FIB)
+
+def fib_memoized(n, M_FIB):
+  if n == 0:
+    return 0
+  if n == 1:
+    return 1
+  if M_FIB[n-1] == None:
+    M_FIB[n-1] = fib_memoized(n-1, M_FIB)
+  if M_FIB[n-2] == None:
+    M_FIB[n-2] = fib_memoized(n-2, M_FIB)
+  M_FIB[n] = M_FIB[n-1] + M_FIB[n-2]
+  return M_FIB[n]
+```
+
+Sin embargo: ¿Realmente hace falta mantener un Array de tamaño n sólo para usar los últimos dos valores?
+
+Se puede mejorar con **Programacion Dinamica**:
+
+```python
+def fib_dinamico(n):
+  if n == 0:
+    return 0
+  if n == 1:
+    return 1
+  anterior = 0
+  actual = 1
+  for i in range(1, n):
+    nuevo = actual + anterior
+    anterior = actual
+    actual = nuevo
+  return actual
+```
+
+La implementacion iterativa con Programacion Dinamica es mas eficiente en terminos de complejidad espacial.
+
+##### Weighted Interval Scheduling con PD
+
+Revisando el algoritmo Greedy implementado anteriormente:
+
+[Wheighted Interval Scheduling en Greedy](#scheduling-con-minimizacion-de-retrasos)
+
+```python
+# 1) [----]              w1=1
+# 2)    [-------]        w2=3
+# 3)         [----]      w3=1
+```
+
+Si resolvemos con el mismo algoritmo greedy que vimos anteriormente:
+`T={1,3}; W=2`
+Pero la solución óptima es:
+`T={2}; W=3`
+
+Fuerza bruta, intentaria probando con todas las combinaciones posibles.
+Backtracking intentaria construyendo progresivamente candidatos parciales, y podando a medida que se encuentran elementos incompatibles entre si.
+
+###### Analisis del problema
+
+Ordenemos los intervalos por menor tiempo de finalización f_i
+Si i<j entonces f_i ≤ f_j
+Definamos una función P(k) como el mayor índice i<k tal que los elementos i y k son disjuntos, o 0 si no existe ningún elemento i<k disjunto con k
+Definamos T_k como una solución óptima que puede incluir (o no)  los primeros k elementos de la lista ordenada de intervalos
+Definamos una función W(k) que devuelve el peso de la solución óptima T_k
+
+```python
+1) [---]             w1=2
+2)   [-----]         w2=4
+3)      [-----]      w3=4
+4)  [-----------]    w4=5
+5)             [---] w5=2
+```
+
+¿Cuánto valen Tk, W(k) y P(k) para k={0,1,..,5}?
+
+- T0={}; W(0)=0; P(0)=0
+- T1={1}; W(1)=2; P(1)=0
+- T2={2}; W(2)=4; P(2)=0
+- T3={1,3}; W(3)=6; P(3)=1
+- T4={1,3}; W(4)=6; P(4)=0
+- T5={1,3,5}; W(5)=8; P(5)=3
+
+Para cada k, Tk puede incluir o no  los primeros k elementos de la lista ordenada de intervalos:
+
+- Podría incluir el k-ésimo elemento:
+  - Entonces ningún elemento entre P(k)+1 y k puede pertenecer a T_k porque se solaparían
+  - Tampoco se solapan k y los elementos {1,.., P(k)} incluidos en T_k
+- Podría no incluir el k-ésimo elemento:
+  - Entonces T_k es una solución formada por elementos de {1,.., k-1} que no se solapan
+
+Analizamos K = 5:
+
+- T_k={1, 3, 5}
+- El elemento k=5 está en T_k
+- P(5)=3
+- Los elementos entre P(5)+1 y 5 no están en T_k
+- Los elementos entre 1 y P(5) incluidos en T_k no se solapan
+
+Analizamos K = 4:
+
+- T_k={1, 3}
+- El elemento k=4 no está en T_k
+- P(4)=0
+- Los elementos entre 1 y k-1 incluidos en T_k no se solapan
+
+Hay **Subestructuras Optimas**: Yo puedo encontrar el optimo global si analizo el optimo de los subproblemas independientes entre si.
+
+Para todo elemento k, el valor de W(k) dependerá de si el k-ésimo elemento está o no en Tk:
+
+- Si el k-ésimo elemento no está en Tk:
+  - W(k) = W(k-1)
+- Si el k-ésimo elemento está en Tk:
+  - W(k) = wk + W(P(k))
+
+Analizamos k = 4:
+
+- Tk={1, 3} (mal ejemplo, pero asumimos que 4 no esta)
+- El elemento k=4 no está en Tk
+- W(4)=W(3)=6
+
+Analizamos k = 5:
+
+- Tk={1, 3, 5}
+- El elemento k=5 está en Tk
+- W(5)=w5 + W(P(5))=w5+W(3)=2+6=8
+
+Entonces podemos asegurar que:
+`W(k)=max(wk + W(P(k)), W(k-1))`
+
+Y además, todo elemento k estará en Tk si y sólo si:
+`wk + W(P(k)) ≥ W(k-1)`
+
+Hay **Subproblemas Superpuestos**, es decir que, para resolver el proximo problema, voy a estar reutilizando resultados de los problemas que resolvi anteriormente.
+
+Se puede usar el maximo de T_K o el maximo de K - 1, reutilizando asi soluciones.
+
+Sabiendo que hay **Subestructuras Optimas y hay Subproblemas Superpuestos, se puede resolver mediante Programacion Dinamica**.
+
+Los problemas de Programacion dinamica se pueden resolver con recursividad:
+
+```python
+def w(k, p, pesos):
+  if k==0: return 0
+  return max(pesos[k]+w(p[k],p,pesos), w(k-1,p,pesos))
+```
+
+Sin embargo, tambien se puede resolver recursivo y con Memorizacion:
+
+```python
+def w_con_memoria(k, p, pesos):
+  M = [None] * (k+1)
+  return w_memoized(k, p, pesos, M)
+
+def w_memoized(k, p, pesos, M):
+  if k == 0:
+    return 0
+  if M[k-1] == None:
+    M[k-1] = w_memoized(k-1, p, pesos, M)
+  M[k] = max(pesos[k] + M[p[k]], M[k-1])
+  return M[k]
+```
+
+Sin embargo, se puede mediante el approach **Bottom Up**, de forma Dinamica, para calcular el valor optimo:
+
+```python
+def w_dinamico(p, pesos):
+  n = len(pesos)
+  M = [None] (n +1)
+  M[0] = 0
+
+  for k in range(1, n+1):
+    M[k]=max(pesos[k] + M[p[k]], M[k-1])
+  return M[n]
+```
+
+Este algoritmo complementario sirve para identificar el conjunto optimo:
+
+```python
+def t_dinamico(k, p, pesos, M, solucion):
+  if k==0: return solucion
+  if pesos[k] + M[p[k]] >= M[k-1]:
+    solucion.append(k)
+    return t_dinamico(p[k], p, pesos, M, solucion)
+  else:
+    return t_dinamico(k-1, p, pesos, M, solucion)
+```
+
+Para la versión Backtracking/Fuerza Bruta: O(2n)
+
+Para la versión Dinámica: O(n log n)
+
+- Ordenar por fecha fin: O(n log n)
+- Obtener P(k): O(n log n) (*)
+- Core Dinámico: O(n)
+
+(*) Encontrar P(k) para un elemento es O(log n) por búsqueda binaria. Encontrar P(k) para todos los elementos es O(n log n).
+
+##### Corte de Varilla
+
+- Se tiene una varilla de longitud n
+- Se puede cortar (o no) en cualquier cantidad de cortes de longitud 1≤i≤n
+- Cortar no tiene costo
+- El precio de venta de un corte de tamaño i es pi
+
+Se quiere encontrar la manera de cortar la varilla y vender los cortes que maximice la ganancia total gn
+
+- Tanto la longitud como los cortes son enteros positivos
+- Una posible solución sería no hacer cortes y vender la varilla entera, de longitud n
+- Se podrían hacer cortes de cualquier longitud 1≤i≤n
+- Se podrían hacer algunos cortes más de una vez
+- Hasta se podrían hacer algunos cortes sí y otros no
+
+![img](img/corte_de_varilla.png)
+
+Analisis:
+
+- Definimos gi como la mayor ganancia que se puede obtener de una varilla de longitud i (1≤i≤n)
+- Como no conocemos la forma óptima de cortar, probamos todas las posibilidades:
+  - Empezamos con un corte i=1, que tiene un precio p1
+  - Y buscamos la forma óptima de cortar el resto de la varilla, que mide n-1
+  - Después, probamos un corte i=2, con un precio p2
+  - Y buscamos la forma óptima de cortar el resto de la varilla, que mide n-2
+  - Etc.
+- Al final, nos quedamos con la mejor solución:
+  - gn=max{pn, p1+gn-1, p2 + gn-2, …, pn-1 + g1}
+
+Para resolver el problema de tamaño n, debemos resolver problemas idénticos pero más chicos. Hecho el primer corte, las dos partes forman dos subproblemas idénticos al original (pero más chicos).
+
+Hay subestructura Optima!
+
+Ejemplo de codigo recursivo:
+
+```python
+def g(p, n):
+  if n==0: return 0
+  q=-1
+  for i in range(1,n+1):
+    q=max(q, p[i] + g(p, n-i)
+  return q
+```
+
+Complejidad: O(2^n)
+
+![img](img/corte_de_varilla_rec.png)
+
+Pero... hay Subproblemas Superpuestos!!
+
+Ejemplo de codigo de recursividad con memorizacion:
+
+```python
+def g_con_memoria(p, n):
+  M = [-1] * (n+1)
+  return g_memoized(p, n, M)
+
+def g_memoized(p, n, M):
+  if M[n] != -1:
+    return M[n]
+  if n == 0:
+    return 0
+  q=-1
+  for i in range(1,n+1):
+    q=max(q, p[i] + g_memoized(p, n-i, M))
+  M[n]=q
+  return q
+```
+
+Costo de la variante Recursiva con Memoization:
+
+- La primera iteración itera n veces
+- La segunda, n-1 veces
+- La tercera, n-2 veces
+- …
+- El total de las llamadas recursivas es la suma de los términos de una serie aritmética:
+
+La variante recursiva con Memoization es O(n2)
+
+Ahora, un ejemplo de codigo dinamico:
+
+```python
+def g_dinamico(p, n):
+  M = [-1] * (n+1)
+  M[0]=0
+
+  for j in range(1,n+1): # tamaño de la varilla
+    q=-1
+    for i in range(1,j+1): # posición del corte
+      q=max(q, p[i] + M[j-i])
+    M[j]=q
+  return M[n]
+```
+
+Costo de la variante Dinámica
+
+- Hay dos loops anidados:
+  - El loop externo itera n veces
+  - El loop interno es una serie aritmética
+- La variante Dinámica también es O(n2)
+
+Obtener la solucion:
+
+```python
+def g_dinamico_y_solucion(p, n, solucion):
+  M = [-1] * (n+1)
+  M[0]=0
+
+  for j in range(1,n+1): # tamaño de la varilla
+    q=-1
+    for i in range(1,j+1): # posición del corte
+      if q<p[i] + M[j-i]
+        q=p[i] + M[j-i]
+  solucion[j]=i # guardar la posición del corte
+    M[j]=q
+  return M[n]
+```
 
 ---
 
