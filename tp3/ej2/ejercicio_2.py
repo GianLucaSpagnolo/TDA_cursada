@@ -100,6 +100,3 @@ for i in result["selectedItems"]:
 
 print("Valor total:", result["totalValue"])
 print("Peso total:", result["totalWeight"])
-
-
-
