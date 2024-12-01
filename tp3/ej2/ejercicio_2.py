@@ -7,7 +7,7 @@ def knapsack_approx(weights, values, capacity, epsilon):
     v_star = max(values)
 
     # Calcular el parámetro de redondeo b
-    b = int(epsilon / (2 * n) * v_star)
+    b = epsilon / (2 * n) * v_star
 
     # Redondear los valores de los elementos
     scaled_values = [int(math.ceil(value / b)) for value in values]  # Escalamos los valores
