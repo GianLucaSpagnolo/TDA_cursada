@@ -31,7 +31,8 @@ def leer_csv_para_crear_grafo(archivo: str) -> dict:
             cantidad_vertices += 1
             cantidad_aristas += len(aristas)
 
-    return cantidad_vertices, cantidad_aristas // 2, grafo
+    cantidad_aristas //= 2 # Grafo no dirigido, no se cuentan las aristas dos veces
+    return cantidad_vertices, cantidad_aristas, grafo
 
 
 def test_ej1() -> None:
@@ -41,7 +42,7 @@ def test_ej1() -> None:
 
     cantidad_vertices, cantidad_aristas, grafo = leer_csv_para_crear_grafo(PATH_ARCHIVO)
 
-    # Se espera, al menos, 2/3 
+    # Se espera, al menos, 2/3 aristas satisfechas
     aristas_satisfechas_esperadas = ej1.obtener_aristas_satisfechas_minimas(cantidad_aristas)
 
     start_time: float = process_time()
