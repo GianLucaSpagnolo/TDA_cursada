@@ -37,7 +37,7 @@ def leer_csv_para_crear_grafo(archivo: str) -> dict:
 
 def test_ej1() -> None:
 
-    print("\n\033[31;1;4mProblema de 3-Coloreo\033[0m")
+    print("\033[31;1;4mProblema de 3-Coloreo\033[0m")
     print(f"\n\033[31;1;4mTest con archivo:\033[0m {PATH_ARCHIVO}\n")
 
     cantidad_vertices, cantidad_aristas, grafo = leer_csv_para_crear_grafo(PATH_ARCHIVO)
@@ -46,11 +46,11 @@ def test_ej1() -> None:
     aristas_satisfechas_esperadas = ej1.obtener_aristas_satisfechas_minimas(cantidad_aristas)
 
     start_time: float = process_time()
-    asignacion_obtenida, aristas_satisfechas = ej1.problema_3_coloreo_aleatorio(grafo, aristas_satisfechas_esperadas)
+    asignacion_obtenida, aristas_satisfechas, cantidad_iteraciones = ej1.problema_3_coloreo_aleatorio(grafo, aristas_satisfechas_esperadas)
     end_time: float = process_time() - start_time
 
     print(f"Tiempo de ejecución: {end_time:.8f} segundos")
     print(f"Grafo obtenido (con colores de cada vertice): {asignacion_obtenida}")
-    print(f"Se han obtenido {aristas_satisfechas} aristas satisfechas.")
+    print(f"\nAristas Totales: {cantidad_aristas}\nAristas Satisfechas: {aristas_satisfechas}\nCantidad de Iteraciones: {cantidad_iteraciones}")
 
 test_ej1()

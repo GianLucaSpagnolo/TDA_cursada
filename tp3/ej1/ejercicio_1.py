@@ -18,6 +18,7 @@ def problema_3_coloreo_aleatorio(grafo, limite):
     """
     mejor_asignacion = {} # Mejor asignacion de color para cada vertice
     max_aristas_satisfechas = 0 # Cantidad maxima de aristas satisfechas
+    cantidad_iteraciones = 0 # Cantidad de iteraciones realizadas para obtener el resultado
     
     while max_aristas_satisfechas < limite:
         asignacion = {}
@@ -35,5 +36,7 @@ def problema_3_coloreo_aleatorio(grafo, limite):
         if aristas_satisfechas > max_aristas_satisfechas:
             mejor_asignacion = asignacion
             max_aristas_satisfechas = aristas_satisfechas
+
+        cantidad_iteraciones += 1
     
-    return mejor_asignacion, max_aristas_satisfechas
+    return mejor_asignacion, max_aristas_satisfechas, cantidad_iteraciones
