@@ -10,13 +10,8 @@ def knapsack_approx(weights, values, capacity, epsilon):
     b = int(epsilon / (2 * n) * v_star)
 
     # Redondear los valores de los elementos
-    rounded_values = [math.ceil(value / b) * b for value in values]  # Redondeamos a múltiplos superiores de b
-    scaled_values = [int(value / b) for value in rounded_values]  # Se construye el arreglo de valores escalados
+    scaled_values = [int(math.ceil(value / b)) for value in values]  # Escalamos los valores
     
-    print(f"Valores originales: {values}")
-    print(f"Valores redondeados: {rounded_values}")
-    print(f"Valores escalados: {scaled_values}")
-
     # Resolver el problema de la mochila usando el algoritmo de programación dinámica con los valores escalados
     max_value = sum(scaled_values)
     matrix = [[0] * (max_value + 1) for _ in range(n + 1)]
