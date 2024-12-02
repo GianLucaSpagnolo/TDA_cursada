@@ -4,35 +4,30 @@ from random import randint
 
 # e
 EPSILONS = [
-    0.0625,
-    0.1,
-    0.125,
     0.2,
-    0.25,
-    0.33,
-    0.5,
+    0.3,
+    0.5
 ]
 
 # c
 CAPACITIES = [
-    5000,
-    10000,
-    20000,
+    500,
+    1000,
+    2000,
 ]
 
 # v
 ELEMENTS_AMOUNTS = [
     10,
     50,
+    75,
     100,
-    500,
-    1000,
 ]
 
 MAX_RANDOM_VALUE = 100
 
 def MAX_RANDOM_WEIGHT(capacity, elements_amount):
-    return capacity // elements_amount
+    return (capacity * 3) // elements_amount
 
 
 def generate_tests():

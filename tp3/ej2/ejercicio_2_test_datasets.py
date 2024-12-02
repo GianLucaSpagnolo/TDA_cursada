@@ -1,5 +1,6 @@
 import os
-from ...ejercicio_2 import knapsack_approx
+import time
+import ejercicio_2 as ej2
 
 
 datasets = [
@@ -32,14 +33,33 @@ for epsilon in os.listdir(path):
 
 
 for dataset in datasets:
-    solution = knapsack_approx(
+
+    epsilon = dataset['epsilon']
+    capacity = dataset['capacity']
+
+    print("------------------------------------------")
+    print(f"Epsilon: {epsilon}")
+    print(f"Capacity: {capacity}")
+    print(f"Element count: {dataset['elementCount']}\n")
+
+    start_time = time.time()
+
+    solution = ej2.knapsack_approx(
         [e[0] for e in dataset["elements"]], 
         [e[1] for e in dataset["elements"]], 
         dataset["capacity"], 
         dataset["epsilon"]
     )
 
+    elapsed_time = time.time() - start_time
+
     print(solution)
 
-    # ...
+    # asserts
+    # assert solution["totalValue"] >= optimal_value
+    assert solution["totalWeight"] <= (1 + epsilon) * capacity
+
+    print(f"Elapsed time: {elapsed_time}")
+
+    print("------------------------------------------")
 
