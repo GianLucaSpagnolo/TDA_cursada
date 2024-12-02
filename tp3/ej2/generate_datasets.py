@@ -55,6 +55,7 @@ def generate_tests():
                 with open(csvpath, 'x') as f:
                     f.write(f'{epsilon}\n')
                     f.write(f'{capacity}\n')
+                    f.write(f'{elements_amount}\n')
                     for i in range(elements_amount):
                         weight = randint(1, MAX_RANDOM_WEIGHT(capacity, elements_amount))
                         value = randint(0, MAX_RANDOM_VALUE)
