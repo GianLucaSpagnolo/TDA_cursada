@@ -34,7 +34,7 @@ for epsilon in os.listdir(path):
 
 with open("ejercicio_2_test_results.csv", "x") as f:
 
-    f.write("epsilon,capacity,elementCount,totalWeight,totalValue,elapsedTime\n")
+    f.write("epsilon,capacity,elementCount,totalWeight,totalValue,elapsedTimeMs\n")
 
     for dataset in datasets:
         epsilon = dataset['epsilon']
@@ -62,10 +62,10 @@ with open("ejercicio_2_test_results.csv", "x") as f:
         # assert solution["totalValue"] >= optimal_value
         assert solution["totalWeight"] <= (1 + epsilon) * capacity
 
-        print(f"Elapsed time: {elapsed_time}")
+        print(f"Elapsed time: {round(elapsed_time * 1000, 0)}")
 
 
-        csv_line = f"{epsilon},{capacity},{len(dataset['elements'])},{solution['totalWeight']},{solution['totalValue']},{elapsed_time}"
+        csv_line = f"{epsilon},{capacity},{len(dataset['elements'])},{solution['totalWeight']},{solution['totalValue']},{int(round(elapsed_time * 1000, 0))}"
 
         f.write(csv_line + "\n")
 
