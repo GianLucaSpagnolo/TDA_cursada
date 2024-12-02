@@ -6,6 +6,8 @@ import ejercicio_1 as ej1
 # Se puede disponer de un archivo .csv con un grafo personalizado el cual debe ser ubicado en el directorio ej1/res
 
 PATH_ARCHIVO = "ej1/res/grafo_1.csv"
+#PATH_ARCHIVO = "ej1/res/grafo_2.csv"
+#PATH_ARCHIVO = "ej1/res/grafo_3.csv"
 
 
 
@@ -44,7 +46,6 @@ def test_ej1() -> None:
 
     # Se espera, al menos, 2/3 aristas satisfechas
     aristas_satisfechas_esperadas = ej1.obtener_aristas_satisfechas_minimas(cantidad_aristas)
-
     start_time: float = process_time()
     asignacion_obtenida, aristas_satisfechas, cantidad_iteraciones = ej1.problema_3_coloreo_aleatorio(grafo, aristas_satisfechas_esperadas)
     end_time: float = process_time() - start_time
