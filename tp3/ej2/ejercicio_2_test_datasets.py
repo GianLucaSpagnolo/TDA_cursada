@@ -32,34 +32,43 @@ for epsilon in os.listdir(path):
                     })
 
 
-for dataset in datasets:
+with open("ejercicio_2_test_results.csv", "x") as f:
 
-    epsilon = dataset['epsilon']
-    capacity = dataset['capacity']
+    f.write("epsilon,capacity,elementCount,totalWeight,totalValue,elapsedTime\n")
 
-    print("------------------------------------------")
-    print(f"Epsilon: {epsilon}")
-    print(f"Capacity: {capacity}")
-    print(f"Element count: {dataset['elementCount']}\n")
+    for dataset in datasets:
+        epsilon = dataset['epsilon']
+        capacity = dataset['capacity']
 
-    start_time = time.time()
+        print("------------------------------------------")
+        print(f"Epsilon: {epsilon}")
+        print(f"Capacity: {capacity}")
+        print(f"Element count: {dataset['elementCount']}\n")
 
-    solution = ej2.knapsack_approx(
-        [e[0] for e in dataset["elements"]], 
-        [e[1] for e in dataset["elements"]], 
-        dataset["capacity"], 
-        dataset["epsilon"]
-    )
+        start_time = time.time()
 
-    elapsed_time = time.time() - start_time
+        solution = ej2.knapsack_approx(
+            [e[0] for e in dataset["elements"]], 
+            [e[1] for e in dataset["elements"]], 
+            dataset["capacity"], 
+            dataset["epsilon"]
+        )
 
-    print(solution)
+        elapsed_time = time.time() - start_time
 
-    # asserts
-    # assert solution["totalValue"] >= optimal_value
-    assert solution["totalWeight"] <= (1 + epsilon) * capacity
+        print(solution)
 
-    print(f"Elapsed time: {elapsed_time}")
+        # asserts
+        # assert solution["totalValue"] >= optimal_value
+        assert solution["totalWeight"] <= (1 + epsilon) * capacity
 
-    print("------------------------------------------")
+        print(f"Elapsed time: {elapsed_time}")
+
+
+        csv_line = f"{epsilon},{capacity},{len(dataset['elements'])},{solution['totalWeight']},{solution['totalValue']},{elapsed_time}"
+
+        f.write(csv_line + "\n")
+
+
+        print("------------------------------------------")
 
