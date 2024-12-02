@@ -34,4 +34,27 @@ Recordar que, al tratarse de un problema que utiliza grafos no dirigidos, es nec
 
 ### Ejercicio 2
 
+#### Correr tests con un archivo .csv
+
+Comando:
+
+`python3 ejercicio_2_test.py <filename>`
+
+Ejemplo
+
+`python3 ejercicio_2_test.py example_test_e0.2_c500_v50.csv` 
+
+
+#### Formato del archivo .csv:
+
+<pre>
+epsilon<br>
+capacity<br>
+elementCount<br>
+weight1,value1<br>
+weight2,value2<br>
+...<br>
+weightN,valueN<br>
+</pre>
+
 
