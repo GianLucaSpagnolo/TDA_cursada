@@ -4,22 +4,17 @@ Teoria de Algoritmos (TB024) curso 02: Echeverria
 
 Segundo cuatrimestre 2024
 
+Resumen introductorio de los temas dados hasta Programacion Dinamica.
+
 ## Clases
 
-- [Clase 03/09: Introduccion - Repaso - Grafos](#clase-0309)
-- [Clase 05/09: Grafos - DyC](#clase-0509)
-- [Clase 10/09: Greedy 1](#clase-1009)
-- [Clase 12/09: Greedy 2](#clase-1209)
-- [Clase 17/09: Backtracking 1](#clase-1709)
-- [Clase 19/09: Backtracking 2](#clase-1909)
-- [Clase 24/09: Programacion Dinamica 1](#clase-2409)
-- [Clase 26/09: Programacion Dinamica 2](#clase-2609)
-- [Clase 01/10: Programacion Dinamica 3](#clase-0110)
-- [Clase 03/10: Programacion Dinamica 4](#clase-0310)
-- [Clase 08/10: Programacion Lineal 1](#clase-0810)
-- [Clase 10/10: Programacion Lineal 2](#clase-1010)
-- [Clase 15/10: Redes de Flujo 1](#clase-1510)
-- [Clase 17/10: Redes de Flujo 2](#clase-1710)
+- [Clase 03/09: Introduccion - Repaso - Grafos](#clase-1)
+- [Clase 05/09: Grafos - DyC](#clase-2)
+- [Clase 10/09: Greedy 1](#clase-3)
+- [Clase 12/09: Greedy 2](#clase-4)
+- [Clase 17/09: Backtracking 1](#clase-5)
+- [Clase 19/09: Backtracking 2](#clase-6)
+- [Clase 24/09: Programacion Dinamica](#clase-7)
 
 ## Modalidad
 
@@ -38,7 +33,7 @@ Lenguaje a utilizar en la materia: a eleccion.
 
 ---
 
-## Clase 03/09
+## Clase 1
 
 ### Repaso
 
@@ -223,7 +218,7 @@ Sea A la matriz de adyacencia de un grafo (dirigido o no). Entonces el elemento 
 
 ---
 
-## Clase 05/09
+## Clase 2
 
 ### Arboles
 
@@ -440,7 +435,7 @@ En cada iteracion ¿Cuantos llamados recursivos hago? Solo 1! (parece una busque
 
 ---
 
-## Clase 10/09
+## Clase 3
 
 ### Algoritmos Greedy
 
@@ -705,7 +700,7 @@ Posible algoritmo:
 
 ---
 
-## Clase 12/09
+## Clase 4
 
 ### Otro problema greedy: **Problema de la Mochila**
 
@@ -995,7 +990,7 @@ Si los pesos de todas las aristas son similares, nuestro algoritmo greedy puede 
 
 ---
 
-## Clase 17/09
+## Clase 5
 
 ### Fuerza Bruta
 
@@ -1349,7 +1344,7 @@ Existen otros algoritmos para encontrar el casco convexo:
 
 ---
 
-## Clase 19/09
+## Clase 6
 
 Repaso de la clase anterior:
 
@@ -1617,7 +1612,7 @@ Como obtener una cota desde la primer iteracion para mejorar las podas:
 
 ---
 
-## Clase 24/09
+## Clase 7
 
 ### Programacion Dinamica
 
@@ -1968,48 +1963,3 @@ def g_dinamico_y_solucion(p, n, solucion):
     M[j]=q
   return M[n]
 ```
-
----
-
-## Clase 26/09
-
-
-
-
----
-
-## Clase 01/10
-
-
-
----
-
-## Clase 03/10
-
-
-
----
-
-## Clase 08/10
-
-
-
----
-
-## Clase 10/10
-
-
-
----
-
-## Clase 15/10
-
-
-
----
-
-## Clase 17/10
-
-
-
----
