@@ -11,7 +11,15 @@ Segundo cuatrimestre 2024
 - [Clase 10/09: Greedy 1](#clase-1009)
 - [Clase 12/09: Greedy 2](#clase-1209)
 - [Clase 17/09: Backtracking 1](#clase-1709)
-- [Clase 19/09](#clase-1909)
+- [Clase 19/09: Backtracking 2](#clase-1909)
+- [Clase 24/09: Programacion Dinamica 1](#clase-2409)
+- [Clase 26/09: Programacion Dinamica 2](#clase-2609)
+- [Clase 01/10: Programacion Dinamica 3](#clase-0110)
+- [Clase 03/10: Programacion Dinamica 4](#clase-0310)
+- [Clase 08/10: Programacion Lineal 1](#clase-0810)
+- [Clase 10/10: Programacion Lineal 2](#clase-1010)
+- [Clase 15/10: Redes de Flujo 1](#clase-1510)
+- [Clase 17/10: Redes de Flujo 2](#clase-1710)
 
 ## Modalidad
 
@@ -1342,3 +1350,666 @@ Existen otros algoritmos para encontrar el casco convexo:
 ---
 
 ## Clase 19/09
+
+Repaso de la clase anterior:
+
+![img](img/repaso_arbol_de_decisiones.png)
+
+Funcionamiento de **Backtracking**:
+
+- Recorre recursivamente el Árbol de Decisiones usando DFS:
+- Verifica el candidato parcial:
+  - Si es la solución:
+    - la devuelve
+- Incrementa el candidato parcial
+- Si no es válido:
+  - retrocede y vuelve a 2
+- Si es válido:
+  - recorre recursivamente desde 1 con el candidato parcial actual
+- Llegado a este punto, el problema no tiene solución
+
+### Sudoku
+
+- Se tiene una grilla de 9x9 celdas
+- La grilla está organizada en 9 bloques de 3x3 celdas
+- En cada bloque deben colocarse todos los dígitos del 1 al 9, sin repetirlos
+- Cada columna y cada fila de la grilla debe tener todos los dígitos del 1 al 9, sin repetirlos
+- Algunas de las celdas ya tienen números asignados
+
+Se desea encontrar una asignación de números a grillas que cumpla con todas las condiciones antes mencionadas
+
+Impementacion:
+
+```python
+def sudoku(actual, M):
+  # Verificar candidato parcial
+  siguiente=proxima_posicion(actual, M)
+  if siguiente >= 81: return True
+
+  # Incrementar candidato parcial
+  for num in range (1,10):
+
+    # Si no es valido, prueba con otro candidato
+
+    if puedo_poner(num, siguiente, M):
+      # Si es valido, llama recursivamente
+      M[fila(siguiente)][columna(siguiente)] = num
+      if sudoku(siguiente, M): return True
+  
+  # Backtrack
+  M[fila(siguiente)][columna(siguiente)]=0
+  return False
+
+```
+
+#### Analogia con Grafos
+
+- Los vértices representan cada celda del Sudoku
+- Las aristas unen vértices que no pueden tener el mismo dígito:
+  - Vértices de la misma fila
+  - Vértices de la misma columna
+  - Vértices del mismo bloque
+
+Se trata de **Coloreo de Grafos!**
+
+### Problema del caballo de ajedrez
+
+- Se tiene un tablero de ajedrez de 8x8 casilleros
+- Se tiene una pieza del caballo
+- El caballo se mueve en forma de L: dos casilleros en una dirección y luego uno en dirección perpendicular (2x1)
+
+Determinar una secuencia de movimientos que permita al caballo pasar por todos los casilleros del tablero sin repetirlos
+
+Implementacion en pseudocodigo:
+
+```python
+def caballo(paso):
+  if completo(): return True
+  x, y = obtener_posicion_actual_caballo()
+  for fila, col in movimientos_caballo(x,y):
+    if not dentro_de_tablero(fila, col): continue
+    if casillero_ya_marcado(fila, col): continue
+    mover_a_posicion(fila, col, paso)
+    if (caballo(paso+1)):
+      return True
+    volver_a_posicion(x,y)
+  return False
+```
+
+#### Analogia con Grafos denuevo
+
+- Los vértices representan cada casillero del tablero
+- Las aristas unen un vértice con los vértices a los que podría moverse el caballo:
+  - Movimiento en forma de L: 2x1
+
+Se trata de un **Camino Hamiltoneano**!
+
+Implementacion con Camino Hamiltoneano:
+
+```python
+def problema_del_caballo(n):
+  # 1. Construir el grafo:
+  #    - Crear los n x n vértices
+  #    - Asignar las aristas a los vértices
+  # 2. Buscar el camino hamiltoniano:
+  return camino_hamiltoniano(grafo)
+```
+
+### Isomorfismo de Grafos
+
+Un isomorfismo de los grafos G y H es una biyección sobre los vértices de G y H  f:V(G)→V(H) tal que cualquier par de vértices (u,v) son adyacentes en G sí y sólo si f(u) y f(v) en H también son adyacentes.
+
+![img](img/isomorfismo_de_grafos.png)
+
+Por **Fuerza Bruta**:
+
+- ¿{1,2,3,4,5,6,7,8} se corresponde con {a,b,c,d,g,h,i,j} ? No
+- ¿{1,2,3,4,5,6,7,8} se corresponde con {a,b,c,d,g,h,j,i} ? No
+- ¿{1,2,3,4,5,6,7,8} se corresponde con {a,b,c,d,g,i,j,h} ? No
+
+Podríamos omitir 6! soluciones posibles sólo por detectar que cualquier solución que vincule {1,2} con {a,b} no puede ser válida
+
+#### Podas posibles
+
+¿Qué podas podemos aplicar?
+
+- A nivel global:
+  - Misma cantidad total de vértices en ambos grafos
+  - Misma cantidad total de aristas en ambos grafos
+- Para cada candidato parcial:
+  - Descartar los vértices candidatos donde el grado es distinto
+  - Descartar los vértices candidatos si las adyacencias son incompatibles
+- Ciclos
+  - Ambos grafos deben tener los mismos ciclos
+
+### Problema: Materias compatibles
+
+Un estudiante debe decidir en qué cursos anotarse:
+
+- Se tienen m Materias {M_1, M_2, …, M_m} para cursar
+- Se conoce la lista de Cursos C_ij (con sus horarios) de cada Materia j (cada Materia j puede tener de 1 a n Cursos)
+- No se puede anotar en más de un Curso por Materia
+- No se puede anotar en dos Cursos que se superpongan
+- Quiere cursar todas las Materias
+
+Determinar todas las combinaciones de Materias y Cursos en que se puede anotar
+
+Analisis del problema:
+
+- Las soluciones tendrán la forma {C_i1, C_j2, …, C_nm}
+- ¿Cuántas combinaciones pueden existir?
+  - Si todas las m materias y cursos fueran compatibles entre sí, y si todas tuvieran n cursos disponibles, existirían nm posibles combinaciones
+
+Estrategia:
+
+- Si ya agoté todas las materias:
+  - Si el candidato parcial es factible
+    - devolver el candidato parcial
+  - Si no
+    - Devolver una solución vacía
+- Si el candidato parcial no es factible:
+  - Devolver una solución vacía
+- Tomar la próxima materia de la lista de materias y removerla
+- Para cada curso de la materia seleccionada:
+  - llamar recursivamente con el candidato parcial + curso seleccionado
+  - agregar las soluciones devueltas a la lista de soluciones halladas
+- Regresar la materia analizada a la lista de materias
+- Devolver la lista de soluciones halladas
+
+Para determinar si un candidato parcial es factible:
+
+- Se parte de un candidato parcial
+- Se toma el último curso agregado al candidato parcial
+- Para cada curso del candidato parcial
+  - Si el curso seleccionado es el último curso agregado:
+    - continuar con el próximo curso del candidato parcial
+  - Si el curso seleccionado y el último curso agregado no son compatibles
+    - terminar y devolver False
+- Llegados hasta aquí, el candidato parcial y el último curso agregado son compatibles: devolver True
+
+#### Analogia con Grafos... otra vez
+
+- Los vértices podrían ser los cursos Cij
+- Las aristas unirían los cursos de materias distintas que son incompatibles entre sí
+- Las aristas también unirían todos los cursos de una misma materia entre sí
+
+Se trata del problema de **Independent Set**!
+
+### Sumatoria de N dados
+
+- Se tienen N dados de M caras
+- Se desea sumar un total S
+
+Determinar todos los lanzamientos de los N dados que suman S
+
+Analisis:
+
+- Las soluciones tendrán la forma {D_1, D_2, …, D_n}, donde D_i es el valor que dio el i-ésimo dado al ser lanzado
+- ¿Cuántas combinaciones pueden existir?
+  - Si m es la cantidad de caras del dado, existirían m^n posibles permutaciones
+
+Estrategia:
+
+- Si la cantidad de elementos del candidato parcial es N y su suma es S:
+  - Agregar el candidato parcial a la lista de soluciones y volver
+- Podas:
+  - Si la longitud del candidato parcial es N, volver
+  - Si Sum(candidato parcial) es mayor o igual que S, volver
+  - Si Sum(candidato parcial) + [N-Len(candidato parcial)]*M < S, volver
+  - Si Sum(candidato parcial) + [N-Len(candidato parcial)]*1 > S, volver
+- Para cada valor posible de un lanzamiento:
+  - Incrementar el candidato parcial con el valor
+  - Llamar recursivamente con el candidato parcial + valor obtenido
+  - Descartar el candidato parcial incrementado
+- Volver
+
+#### Analogia pero con otro problema similar
+
+- Cada lanzamiento posible podría ser un elemento a considerar
+- El valor de cada dado podría ser su peso
+- La suma total de los dados podría ser la capacidad a completar
+
+Es el **Problema de la Mochila**!
+
+### Sumatoria de Subconjuntos (Subset Sum)
+
+- Se tiene un **multiset** (un set que admite elementos repetidos) S de n números naturales
+- Se define un valor T como suma objetivo
+
+Se quiere determinar si existe un subconjunto de S tal que sus elementos sumen exactamente T
+
+Analisis:
+
+- Las soluciones tendrán la forma {e_1, e_2, …, e_k}, donde e_i es un elemento de S
+- ¿Cuántas combinaciones pueden existir?
+  - Si hay n elementos en S, habría 2n subconjuntos
+  - Verificar la suma de cada subconjunto demandaría O(n)
+  - La complejidad de Fuerza Bruta sería O(2nn)
+
+Estrategia:
+
+- Si el candidato parcial suma T, devolverlo
+- Podas:
+  - Si la suma del candidato parcial excede T, devolver una solución vacía
+  - Si no quedan elementos por analizar, devolver una solución vacía
+- Incrementar el candidato parcial con el próximo elemento de S (pero con un elemento menos en S)
+- Llamar recursivamente con el candidato parcial incrementado
+- Si la llamada recursiva devuelve una solución:
+  - Devolverla
+- Llamar recursivamente con el candidato sin incrementar (pero con un elemento menos en S)
+- Devolver el resultado de la llamada recursiva
+
+Y si, este problema tambien se puede representar como una analogia del **Problema de la Mochila**...
+
+### Podas en Problemas de Optimizacion
+
+- Tengo un Problema de Optimización (maximizar o minimizar xxxxx)
+- Ya encontré una solución completa y válida, conozco su valor
+- Puedo usarla como cota para podar:
+  - En un problema de minimización, usar ese valor conocido para podar candidatos parciales que lo excedan
+  - En un problema de maximización, usar ese valor conocido para podar un candidato parcial que nunca logre alcanzarlo
+
+Como obtener una cota desde la primer iteracion para mejorar las podas:
+
+- Usar un algoritmo **greedy** para encontrar una primer solución
+- Usar ese resultado (subóptimo) como cota para las primeras podas
+- Cuando encuentro una solución por Backtracking, actualizo la cota y sigo podando
+
+---
+
+## Clase 24/09
+
+### Programacion Dinamica
+
+La **Programacion Dinamica** es una tecnica de diseño de algoritmos, similar a la Division y Conquista, que se utiliza para resolver problemas de optimizacion sujetos a restricciones.
+
+Creado por Bellman, representa la *planificacion de decisiones que cambian a lo largo del tiempo*.
+
+- Se parece a D&C en que divide el problema en partes más pequeñas
+- Se diferencia de D&C en que tiene un enfoque Bottom-Up
+  - Bottom-Up: toma el caso base y lo usa para resolver subproblemas cada vez más grandes hasta llegar al problema a resolver
+  - Top-Down (D&C): toma el problema a resolver y lo divide en subproblemas cada vez más chicos hasta llegar al caso base
+- Es especialmente útil para resolver problemas de optimización
+- Los problemas que se resuelven por Programación Dinámica también pueden **resolverse recursivamente**
+- Se puede usar una **Relación de Recurrencia** para establecer su complejidad temporal
+
+#### Caracteristicas de PD
+
+- **Subestructura Optima**: La solucion optima de un problema puede construirse a partir de la solucion optima de sus subproblemas.
+- **Subproblemas Superpuestos**: Los subproblemas se repiten a lo largo del proceso de resolucion, permitiendo la reutilizacion de soluciones previamente calculadas.
+
+#### Memorizacion
+
+La tecnica de **Memorizacion** consiste en almacenar los resultados de subproblemas ya resueltos para evitar calculos redundantes.
+
+Esto mejora la eficiencia de los algoritmos, reduciendo el tiempo de ejecucion de exponencial a polinomial en muchos casos.
+
+#### Ejemplos de problemas resueltos por PD
+
+Existen numerosos problemas que se pueden resolver de mejor forma aplicando **Programacion Dinamica**, como el Problema de la Mochila, el Problema de Fibonacci, el Problema de Planificacion de Intervalos, etc...
+
+##### Problema de Fibonacci con PD
+
+Se puede resolver de manera ineficiente con recursion, pero se optimiza usando **Memorizacion** para evitar calculos repetidos.
+
+```python
+def fib_con_memoria(n):
+  M_FIB = [None] * (n+1)
+  return fib_memoized(n, M_FIB)
+
+def fib_memoized(n, M_FIB):
+  if n == 0:
+    return 0
+  if n == 1:
+    return 1
+  if M_FIB[n-1] == None:
+    M_FIB[n-1] = fib_memoized(n-1, M_FIB)
+  if M_FIB[n-2] == None:
+    M_FIB[n-2] = fib_memoized(n-2, M_FIB)
+  M_FIB[n] = M_FIB[n-1] + M_FIB[n-2]
+  return M_FIB[n]
+```
+
+Sin embargo: ¿Realmente hace falta mantener un Array de tamaño n sólo para usar los últimos dos valores?
+
+Se puede mejorar con **Programacion Dinamica**:
+
+```python
+def fib_dinamico(n):
+  if n == 0:
+    return 0
+  if n == 1:
+    return 1
+  anterior = 0
+  actual = 1
+  for i in range(1, n):
+    nuevo = actual + anterior
+    anterior = actual
+    actual = nuevo
+  return actual
+```
+
+La implementacion iterativa con Programacion Dinamica es mas eficiente en terminos de complejidad espacial.
+
+##### Weighted Interval Scheduling con PD
+
+Revisando el algoritmo Greedy implementado anteriormente:
+
+[Wheighted Interval Scheduling en Greedy](#scheduling-con-minimizacion-de-retrasos)
+
+```python
+# 1) [----]              w1=1
+# 2)    [-------]        w2=3
+# 3)         [----]      w3=1
+```
+
+Si resolvemos con el mismo algoritmo greedy que vimos anteriormente:
+`T={1,3}; W=2`
+Pero la solución óptima es:
+`T={2}; W=3`
+
+Fuerza bruta, intentaria probando con todas las combinaciones posibles.
+Backtracking intentaria construyendo progresivamente candidatos parciales, y podando a medida que se encuentran elementos incompatibles entre si.
+
+###### Analisis del problema
+
+Ordenemos los intervalos por menor tiempo de finalización f_i
+Si i<j entonces f_i ≤ f_j
+Definamos una función P(k) como el mayor índice i<k tal que los elementos i y k son disjuntos, o 0 si no existe ningún elemento i<k disjunto con k
+Definamos T_k como una solución óptima que puede incluir (o no)  los primeros k elementos de la lista ordenada de intervalos
+Definamos una función W(k) que devuelve el peso de la solución óptima T_k
+
+```python
+1) [---]             w1=2
+2)   [-----]         w2=4
+3)      [-----]      w3=4
+4)  [-----------]    w4=5
+5)             [---] w5=2
+```
+
+¿Cuánto valen Tk, W(k) y P(k) para k={0,1,..,5}?
+
+- T0={}; W(0)=0; P(0)=0
+- T1={1}; W(1)=2; P(1)=0
+- T2={2}; W(2)=4; P(2)=0
+- T3={1,3}; W(3)=6; P(3)=1
+- T4={1,3}; W(4)=6; P(4)=0
+- T5={1,3,5}; W(5)=8; P(5)=3
+
+Para cada k, Tk puede incluir o no  los primeros k elementos de la lista ordenada de intervalos:
+
+- Podría incluir el k-ésimo elemento:
+  - Entonces ningún elemento entre P(k)+1 y k puede pertenecer a T_k porque se solaparían
+  - Tampoco se solapan k y los elementos {1,.., P(k)} incluidos en T_k
+- Podría no incluir el k-ésimo elemento:
+  - Entonces T_k es una solución formada por elementos de {1,.., k-1} que no se solapan
+
+Analizamos K = 5:
+
+- T_k={1, 3, 5}
+- El elemento k=5 está en T_k
+- P(5)=3
+- Los elementos entre P(5)+1 y 5 no están en T_k
+- Los elementos entre 1 y P(5) incluidos en T_k no se solapan
+
+Analizamos K = 4:
+
+- T_k={1, 3}
+- El elemento k=4 no está en T_k
+- P(4)=0
+- Los elementos entre 1 y k-1 incluidos en T_k no se solapan
+
+Hay **Subestructuras Optimas**: Yo puedo encontrar el optimo global si analizo el optimo de los subproblemas independientes entre si.
+
+Para todo elemento k, el valor de W(k) dependerá de si el k-ésimo elemento está o no en Tk:
+
+- Si el k-ésimo elemento no está en Tk:
+  - W(k) = W(k-1)
+- Si el k-ésimo elemento está en Tk:
+  - W(k) = wk + W(P(k))
+
+Analizamos k = 4:
+
+- Tk={1, 3} (mal ejemplo, pero asumimos que 4 no esta)
+- El elemento k=4 no está en Tk
+- W(4)=W(3)=6
+
+Analizamos k = 5:
+
+- Tk={1, 3, 5}
+- El elemento k=5 está en Tk
+- W(5)=w5 + W(P(5))=w5+W(3)=2+6=8
+
+Entonces podemos asegurar que:
+`W(k)=max(wk + W(P(k)), W(k-1))`
+
+Y además, todo elemento k estará en Tk si y sólo si:
+`wk + W(P(k)) ≥ W(k-1)`
+
+Hay **Subproblemas Superpuestos**, es decir que, para resolver el proximo problema, voy a estar reutilizando resultados de los problemas que resolvi anteriormente.
+
+Se puede usar el maximo de T_K o el maximo de K - 1, reutilizando asi soluciones.
+
+Sabiendo que hay **Subestructuras Optimas y hay Subproblemas Superpuestos, se puede resolver mediante Programacion Dinamica**.
+
+Los problemas de Programacion dinamica se pueden resolver con recursividad:
+
+```python
+def w(k, p, pesos):
+  if k==0: return 0
+  return max(pesos[k]+w(p[k],p,pesos), w(k-1,p,pesos))
+```
+
+Sin embargo, tambien se puede resolver recursivo y con Memorizacion:
+
+```python
+def w_con_memoria(k, p, pesos):
+  M = [None] * (k+1)
+  return w_memoized(k, p, pesos, M)
+
+def w_memoized(k, p, pesos, M):
+  if k == 0:
+    return 0
+  if M[k-1] == None:
+    M[k-1] = w_memoized(k-1, p, pesos, M)
+  M[k] = max(pesos[k] + M[p[k]], M[k-1])
+  return M[k]
+```
+
+Sin embargo, se puede mediante el approach **Bottom Up**, de forma Dinamica, para calcular el valor optimo:
+
+```python
+def w_dinamico(p, pesos):
+  n = len(pesos)
+  M = [None] (n +1)
+  M[0] = 0
+
+  for k in range(1, n+1):
+    M[k]=max(pesos[k] + M[p[k]], M[k-1])
+  return M[n]
+```
+
+Este algoritmo complementario sirve para identificar el conjunto optimo:
+
+```python
+def t_dinamico(k, p, pesos, M, solucion):
+  if k==0: return solucion
+  if pesos[k] + M[p[k]] >= M[k-1]:
+    solucion.append(k)
+    return t_dinamico(p[k], p, pesos, M, solucion)
+  else:
+    return t_dinamico(k-1, p, pesos, M, solucion)
+```
+
+Para la versión Backtracking/Fuerza Bruta: O(2n)
+
+Para la versión Dinámica: O(n log n)
+
+- Ordenar por fecha fin: O(n log n)
+- Obtener P(k): O(n log n) (*)
+- Core Dinámico: O(n)
+
+(*) Encontrar P(k) para un elemento es O(log n) por búsqueda binaria. Encontrar P(k) para todos los elementos es O(n log n).
+
+##### Corte de Varilla
+
+- Se tiene una varilla de longitud n
+- Se puede cortar (o no) en cualquier cantidad de cortes de longitud 1≤i≤n
+- Cortar no tiene costo
+- El precio de venta de un corte de tamaño i es pi
+
+Se quiere encontrar la manera de cortar la varilla y vender los cortes que maximice la ganancia total gn
+
+- Tanto la longitud como los cortes son enteros positivos
+- Una posible solución sería no hacer cortes y vender la varilla entera, de longitud n
+- Se podrían hacer cortes de cualquier longitud 1≤i≤n
+- Se podrían hacer algunos cortes más de una vez
+- Hasta se podrían hacer algunos cortes sí y otros no
+
+![img](img/corte_de_varilla.png)
+
+Analisis:
+
+- Definimos gi como la mayor ganancia que se puede obtener de una varilla de longitud i (1≤i≤n)
+- Como no conocemos la forma óptima de cortar, probamos todas las posibilidades:
+  - Empezamos con un corte i=1, que tiene un precio p1
+  - Y buscamos la forma óptima de cortar el resto de la varilla, que mide n-1
+  - Después, probamos un corte i=2, con un precio p2
+  - Y buscamos la forma óptima de cortar el resto de la varilla, que mide n-2
+  - Etc.
+- Al final, nos quedamos con la mejor solución:
+  - gn=max{pn, p1+gn-1, p2 + gn-2, …, pn-1 + g1}
+
+Para resolver el problema de tamaño n, debemos resolver problemas idénticos pero más chicos. Hecho el primer corte, las dos partes forman dos subproblemas idénticos al original (pero más chicos).
+
+Hay subestructura Optima!
+
+Ejemplo de codigo recursivo:
+
+```python
+def g(p, n):
+  if n==0: return 0
+  q=-1
+  for i in range(1,n+1):
+    q=max(q, p[i] + g(p, n-i)
+  return q
+```
+
+Complejidad: O(2^n)
+
+![img](img/corte_de_varilla_rec.png)
+
+Pero... hay Subproblemas Superpuestos!!
+
+Ejemplo de codigo de recursividad con memorizacion:
+
+```python
+def g_con_memoria(p, n):
+  M = [-1] * (n+1)
+  return g_memoized(p, n, M)
+
+def g_memoized(p, n, M):
+  if M[n] != -1:
+    return M[n]
+  if n == 0:
+    return 0
+  q=-1
+  for i in range(1,n+1):
+    q=max(q, p[i] + g_memoized(p, n-i, M))
+  M[n]=q
+  return q
+```
+
+Costo de la variante Recursiva con Memoization:
+
+- La primera iteración itera n veces
+- La segunda, n-1 veces
+- La tercera, n-2 veces
+- …
+- El total de las llamadas recursivas es la suma de los términos de una serie aritmética:
+
+La variante recursiva con Memoization es O(n2)
+
+Ahora, un ejemplo de codigo dinamico:
+
+```python
+def g_dinamico(p, n):
+  M = [-1] * (n+1)
+  M[0]=0
+
+  for j in range(1,n+1): # tamaño de la varilla
+    q=-1
+    for i in range(1,j+1): # posición del corte
+      q=max(q, p[i] + M[j-i])
+    M[j]=q
+  return M[n]
+```
+
+Costo de la variante Dinámica
+
+- Hay dos loops anidados:
+  - El loop externo itera n veces
+  - El loop interno es una serie aritmética
+- La variante Dinámica también es O(n2)
+
+Obtener la solucion:
+
+```python
+def g_dinamico_y_solucion(p, n, solucion):
+  M = [-1] * (n+1)
+  M[0]=0
+
+  for j in range(1,n+1): # tamaño de la varilla
+    q=-1
+    for i in range(1,j+1): # posición del corte
+      if q<p[i] + M[j-i]
+        q=p[i] + M[j-i]
+  solucion[j]=i # guardar la posición del corte
+    M[j]=q
+  return M[n]
+```
+
+---
+
+## Clase 26/09
+
+
+
+
+---
+
+## Clase 01/10
+
+
+
+---
+
+## Clase 03/10
+
+
+
+---
+
+## Clase 08/10
+
+
+
+---
+
+## Clase 10/10
+
+
+
+---
+
+## Clase 15/10
+
+
+
+---
+
+## Clase 17/10
+
+
+
+---
